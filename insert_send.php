@@ -17,6 +17,12 @@ if (empty($insertKana)) {
 }
 
 
+
+
+
+
+
+
 if (empty($errors)) {
     // DB接続
     try {
