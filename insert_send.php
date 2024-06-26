@@ -16,6 +16,10 @@ if (empty($insertKana)) {
     $errors["insertKana"] = $error_message2;
 }
 
+
+
+
+
 if (empty($errors)) {
     // DB接続
     try {
