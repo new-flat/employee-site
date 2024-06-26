@@ -1,0 +1,113 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 1800px;
+    background-color: gainsboro;
+}
+
+
+
+#header {
+    background-color: black;
+}
+
+#header h1 {
+    color: white;
+    margin: 0;
+    padding: 20px 0;
+    margin-left: 20px;
+}
+
+
+.wrapper {
+   width: 1300px;
+    margin: 0 auto;
+    background-color: white;
+}
+
+.ta {
+    padding: 40px 0 80px 40px;
+}
+
+ .formu {
+    display: flex;
+    padding: 30px 0 20px 20px;
+}
+
+.form-list {
+    display: flex;
+    margin-right: 20px;
+}
+
+.list {
+
+    padding: 0px 0px 20px 20px;
+}
+
+
+
+
+
+.table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    max-width: 600px;
+    text-align: center;
+   
+}
+
+.table th, .table td {
+    border: 2px solid black;
+    padding: 1em;
+}
+
+.table thead th {
+    background-color: black;
+    color: white;
+    border: 2px solid black;
+
+}
+
+ #main .pageNation {
+   text-align: center;
+   margin-top: 40px;
+   padding-bottom: 30px;
+}
+
+ #main a {
+    text-decoration: none;
+    color:black
+}
+
+
+/* 社員登録 */
+
+.insert-class {
+   padding:10px 0 20px 20px;;
+}
+
+.label {
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.insertLabel {
+    font-weight: bold;
+}
+
+.insertMust {
+    color: red;
+}
+
+.insert-btn {
+    margin-top: 30px;
+    border: #ccc;   
+    padding: 12px;
+    line-height: 1.428571429;
+    color: white;
+    background-color: black;
+}
+
+
+;
