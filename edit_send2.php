@@ -23,15 +23,11 @@ if (empty($editKana)) {
 
 $birthDate = !empty($data['birth_date']) ? $data['birth_date'] : null;
 
-
 // 編集データをDBに登録
 if (empty($errors)) {
     try {
         $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root");
         $update_sql = "UPDATE `php-test` SET username = :username, kana = :kana, gender = :gender, birth_date = :birth_date WHERE id = :id";
-
-       
-
         $update_stmt = $pdo->prepare($update_sql);
         $update_stmt->bindValue(':username', $editName);
         $update_stmt->bindValue(':kana', $editKana);

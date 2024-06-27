@@ -48,7 +48,6 @@ if (isset($_GET['errors'])) {
         <?php else: ?>
             <form action="edit_send2.php" method="POST" class="edit-class">
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8'); ?>">
-                
                 <div>
                     <div class="label">
                         <label class="insertLabel">氏名</label>
