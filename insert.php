@@ -2,7 +2,7 @@
 
 <?php  
 
-
+require_once("header.html");
 require_once("controll.php");
 
 ?>
@@ -16,9 +16,6 @@ require_once("controll.php");
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="header" class="wrapper">
-       <h1>社員登録</h1>
-    </div>
     <div id="main" class="wrapper">
         <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
             <p style="margin:0">登録しました</p>
@@ -52,7 +49,7 @@ require_once("controll.php");
                     <option value="" selected>選択</option>
                     <option value="1" <?php echo (isset($_POST['insertGender']) && $_POST['insertGender'] === '1') ? 'selected' : ''; ?>>男</option>
                     <option value="2" <?php echo (isset($_POST['insertGender']) && $_POST['insertGender'] === '2') ? 'selected' : ''; ?>>女</option>
-                    <option value="null" <?php echo (isset($_POST['insertGender']) && $_POST['insertGender'] === '') ? 'selected' : ''; ?>>不明</option>
+                    <option value="null" <?php echo (isset($_POST['insertGender']) && $_POST['insertGender'] === 'null') ? 'selected' : ''; ?>>不明</option>
                 </select>
             </div>
             <div>

@@ -1,5 +1,5 @@
 <?php
-
+require_once("header.html");
 require_once("error_message.php");
 
 $errors = array();
@@ -38,9 +38,6 @@ if (isset($_GET['errors'])) {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="header" class="wrapper">
-       <h1>社員編集</h1>
-    </div>
     <div id="main" class="wrapper">
         <?php if (isset($_GET['success']) && $_GET['success'] == 2): ?>
             <p style = "margin:0">更新しました</p>

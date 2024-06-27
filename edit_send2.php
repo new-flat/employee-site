@@ -3,11 +3,15 @@ require_once("controll.php");
 require_once("error_message.php");
 
 $errors = array();
-$id = $_POST['id'];
+$id = $_POST['id'] ?? null;
 $editName = $_POST['editName'];
 $editKana = $_POST['editKana'];
 $editGender = $_POST['editGender'];
-$editDate = $_POST['editDate'];
+$editDate = $_POST['editDate'] ?? null;
+
+if ($editDate === '') {
+    $editDate = null;
+}
 
 // 必須項目のチェック
 if (empty($editName)) {
@@ -17,15 +21,22 @@ if (empty($editKana)) {
     $errors['editKana'] = $error_message2;
 }
 
+$birthDate = !empty($data['birth_date']) ? $data['birth_date'] : null;
+
+
+// 編集データをDBに登録
 if (empty($errors)) {
     try {
         $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root");
         $update_sql = "UPDATE `php-test` SET username = :username, kana = :kana, gender = :gender, birth_date = :birth_date WHERE id = :id";
+
+       
+
         $update_stmt = $pdo->prepare($update_sql);
         $update_stmt->bindValue(':username', $editName);
         $update_stmt->bindValue(':kana', $editKana);
         $update_stmt->bindValue(':gender', $editGender === '' ? null : $editGender, PDO::PARAM_INT);
-        $update_stmt->bindValue(':birth_date', $editDate);
+        $update_stmt->bindValue(':birth_date', $editDate, PDO::PARAM_NULL);
         $update_stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
         if ($update_stmt->execute()) {

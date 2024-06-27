@@ -2,6 +2,7 @@
 
 <?php  
 
+require_once("header.html");
 require_once("controll.php");
 require_once("error_message.php");
 
@@ -16,9 +17,7 @@ require_once("error_message.php");
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="header" class="wrapper">
-       <h1>社員一覧</h1>
-    </div>
+
     <div id="main" class="wrapper">
        <div class="form">
             <form class="formu" action="search.php" method="get">
