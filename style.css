@@ -5,22 +5,48 @@ body {
     background-color: gainsboro;
 }
 
-
-
-#header {
-    background-color: black;
+li {
+    list-style: none;
 }
 
-#header h1 {
+a {
+    text-decoration: none;
+}
+
+
+
+
+
+/* .class {
+    background-color: black;
+} */
+
+ #header {
+    display: flex;
+    justify-content: space-between;
+    background-color: black;
+    height: 50px;
+   
+}
+
+.menu {
+    display: flex;
+}
+
+.menu_item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper .menu_btn { 
     color: white;
-    margin: 0;
-    padding: 20px 0;
-    margin-left: 20px;
+    margin: 0 20px;
 }
 
 
 .wrapper {
-   width: 1300px;
+    width: 1300px;
     margin: 0 auto;
     background-color: white;
 }
