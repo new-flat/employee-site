@@ -32,7 +32,7 @@ if (empty($errors)) {
         $update_stmt->bindValue(':username', $editName);
         $update_stmt->bindValue(':kana', $editKana);
         $update_stmt->bindValue(':gender', $editGender === '' ? null : $editGender, PDO::PARAM_INT);
-        $update_stmt->bindValue(':birth_date', $editDate, PDO::PARAM_NULL);
+        $update_stmt->bindValue(':birth_date', $editDate);
         $update_stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
         if ($update_stmt->execute()) {
@@ -43,13 +43,11 @@ if (empty($errors)) {
         } else {
             echo "登録に失敗しました";
         }
-        
-    } catch(PDOException $e) {
+    } catch (PDOException $e) {
         echo $e->getMessage();
     }
 
-    $pdo = null;    
-
+    $pdo = null;
 } else {
     // エラーがある場合はフォームに戻る
     $error_data = [
@@ -58,9 +56,8 @@ if (empty($errors)) {
         'editGender' => $editGender,
         'editDate' => $editDate
     ];
+
     $error_query = http_build_query(['errors' => json_encode(['messages' => $errors, 'data' => $error_data])]);
     header("Location: edit.php?id=" . $id . "&" . $error_query);
     exit;
-    
 }
-?>
