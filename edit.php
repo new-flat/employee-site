@@ -125,7 +125,7 @@ if (isset($_GET['errors'])) {
                    <div class="label">
                         <label class="insertOption">通勤時間(分)</label>
                    </div>  
-                   <input type="number" name="editCommute" value="<?php echo htmlspecialchars($errors['data']['editCommute'] ?? $user->commute_time ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                   <input type="text" name="editCommute" value="<?php echo htmlspecialchars($errors['data']['editCommute'] ?? $user->commute_time ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                    <?php if (!empty($errors['messages']['editCommute'])) : ?>
                         <p><?php echo $errors['messages']['editCommute']; ?></p>
                     <?php endif; ?>  
@@ -135,15 +135,15 @@ if (isset($_GET['errors'])) {
                         <label class="insertOption">血液型</label>
                     </div>
                     <div>
-                        <label><input type="radio" name="editBlood" value="A" <?php if (($errors['editBlood'] ?? $user->blood_type) == "A") {
+                        <label><input type="radio" name="editBlood" value="A" <?php if (($errors['data']['editBlood'] ?? $user->blood_type) == "A") {
                                             echo "checked";}; ?>> A型</label>
-                        <label><input type="radio" name="editBlood"  value="B" <?php if (($errors['editBlood'] ?? $user->blood_type) == "B") {
+                        <label><input type="radio" name="editBlood"  value="B" <?php if (($errors['data']['editBlood'] ?? $user->blood_type) == "B") {
                                             echo "checked";}; ?>> B型</label>
-                        <label><input type="radio" name="editBlood"  value="O" <?php if (($errors['editBlood'] ?? $user->blood_type) == "O") {
+                        <label><input type="radio" name="editBlood"  value="O" <?php if (($errors['data']['editBlood'] ?? $user->blood_type) == "O") {
                                             echo "checked";}; ?>> O型</label>
-                        <label><input type="radio" name="editBlood"  value="AB" <?php if (($errors['editBlood'] ?? $user->blood_type) == "AB") {
+                        <label><input type="radio" name="editBlood"  value="AB" <?php if (($errors['data']['editBlood'] ?? $user->blood_type) == "AB") {
                                             echo "checked";}; ?>> AB型</label>
-                        <label><input type="radio" name="editBlood"  value="" <?php if (($errors['editBlood'] ?? $user->blood_type) == "") {
+                        <label><input type="radio" name="editBlood"  value="" <?php if (($errors['data']['editBlood'] ?? $user->blood_type) == "") {
                                             echo "checked";}; ?>> 不明</label>
                     </div>
                 </div> 

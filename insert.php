@@ -84,7 +84,7 @@ require_once("controll.php");
                    <input type="type" name="insertCommute" value="<?php echo htmlspecialchars($errors['data']['insertCommute'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                    <?php if (!empty($errors['insertCommute'])) : ?>
                     <p class="error"><?php echo $errors['insertCommute']; ?></p>
-                    <?php endif; ?>  
+                   <?php endif; ?>  
                 </div>
                 <div>
                     <div class="label">
