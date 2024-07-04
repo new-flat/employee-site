@@ -45,7 +45,7 @@ require_once("controll.php");
             </div>
             <div>
                 <div class="label">
-                    <label class="insertLabel">性別</label>
+                    <label class="insertOption">性別</label>
                 </div>
                 <select name="insertGender">
                     <option value="" selected>選択</option>
@@ -56,11 +56,58 @@ require_once("controll.php");
             </div>
             <div>
                 <div class="label">
-                    <label class="insertLabel">生年月日</label>
+                    <label class="insertOption">生年月日</label>
                 </div>
                 <input type="date" name="insertDate" value="<?php echo htmlspecialchars($_POST['insertDate'] ?? '', ENT_QUOTES); ?>">
             </div>
+            <div>
+                <div class="label">
+                    <label class="insertOption">メールアドレス</label>
+                    <p class="insertMust">必須</p>
+                </div>
+                    <input type="text" name="insertEmail" value="<?php echo htmlspecialchars($errors['data']['insertEmail']  ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                    <?php if (!empty($errors['insertEmail'])) : ?>
+                        <p class="error"><?php echo $errors['insertEmail']; ?></p>
+                    <?php endif; ?>
+                    <?php if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['insertEmail'])) {
+                        $insertEmail = $_POST['insertEmail'];
+                            if (!filter_var($insertEmail, FILTER_VALIDATE_EMAIL)) {
+                                echo "メールアドレスが正しくありません";
+                            }
+                        }         
+                    ?>  
+                </div> 
+                <div>
+                   <div class="label">
+                        <label class="insertOption">通勤時間(分)</label>
+                   </div>  
+                   <input type="type" name="insertCommute" value="<?php echo htmlspecialchars($errors['data']['insertCommute'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                   <?php if (!empty($errors['insertCommute'])) : ?>
+                    <p class="error"><?php echo $errors['insertCommute']; ?></p>
+                    <?php endif; ?>  
+                </div>
+                <div>
+                    <div class="label">
+                        <label class="insertOption">血液型</label>
+                    </div>
+                    <div>
+                        <label><input type="radio" name="insertBlood" value="A" <?php echo (isset($_POST['insertBlood']) && $_POST['insertBlood'] === 'A') ? 'checked' : ''; ?>> A型</label>
+                        <label><input type="radio" name="insertBlood"  value="B" <?php echo (isset($_POST['insertBlood']) && $_POST['insertBlood'] === 'B') ? 'checked' : ''; ?>> B型</label>
+                        <label><input type="radio" name="insertBlood"  value="O" <?php echo (isset($_POST['insertBlood']) && $_POST['insertBlood'] === 'O') ? 'checked' : ''; ?>> O型</label>
+                        <label><input type="radio" name="insertBlood"  value="AB" <?php echo (isset($_POST['insertBlood']) && $_POST['insertBlood'] === 'AB') ? 'checked' : ''; ?>> AB型</label>
+                        <label><input type="radio" name="insertBlood"  value="" <?php echo (isset($_POST['insertBlood']) && $_POST['insertBlood'] === '') ? 'checked' : ''; ?>> 不明</label>
+                    </div>
+                </div> 
+                <div>
+                    <div class="label">
+                        <label class="insertOption">既婚</label>
+                    </div>
+                    <div>
+                        <label><input type="radio" name="insertMarried" value="1" <?php echo (isset($_POST['insertMarried']) ) ? 'checked' : 'null' ?>>既婚</label>
+                    </div>
+                </div>
 
+            <!-- 登録ボタン -->
             <input class="insert-btn" type="submit" value="登録" name="insert">
 
         </form>
