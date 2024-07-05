@@ -29,6 +29,7 @@ if (isset($_GET["id"])) {
     $errors['id'] = $error_message5;
 }
 
+// ↓これは何？
 if (isset($_GET['errors'])) {
     $errors = json_decode($_GET['errors'], true);
 }
@@ -55,7 +56,7 @@ if (isset($_GET['errors'])) {
         <?php endif ?>
 
         <?php if (isset($errors['id'])) : ?>
-            <p style="margin:0"><?php echo $errors['id']; ?></p>
+            <p style="margin:0"><?php echo htmlspecialchars($errors['id'], ENT_QUOTES, 'UTF-8'); ?></p>
         <?php else : ?>
             <form action="edit_send2.php" method="POST" class="edit-class">
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8'); ?>">
@@ -66,7 +67,7 @@ if (isset($_GET['errors'])) {
                     </div>
                     <input type="text" name="editName" value="<?php echo htmlspecialchars($errors['data']['editName'] ?? $user->username ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                     <?php if (!empty($errors['messages']['editName'])) : ?>
-                        <p><?php echo $errors['messages']['editName']; ?></p>
+                        <p><?php echo htmlspecialchars($errors['messages']['editName'], ENT_QUOTES, 'UTF-8'); ?></p>
                     <?php endif; ?>
 
                 </div>
@@ -77,7 +78,7 @@ if (isset($_GET['errors'])) {
                     </div>
                     <input type="text" name="editKana" value="<?php echo htmlspecialchars($errors['data']['editKana'] ?? $user->kana ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                     <?php if (!empty($errors['messages']['editKana'])) : ?>
-                        <p class="error"><?php echo $errors['messages']['editKana']; ?></p>
+                        <p class="error"><?php echo htmlspecialchars($errors['messages']['editKana'], ENT_QUOTES, 'UTF-8'); ?></p>
                     <?php endif; ?>
 
                 </div>
@@ -110,12 +111,12 @@ if (isset($_GET['errors'])) {
                     </div>
                     <input type="text" name="editEmail" value="<?php echo htmlspecialchars($errors['data']['editEmail'] ?? $user->email ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                     <?php if (!empty($errors['messages']['editEmail'])) : ?>
-                        <p><?php echo $errors['messages']['editEmail']; ?></p>
+                        <p><?php echo htmlspecialchars($errors['messages']['editEmail'], ENT_QUOTES, 'UTF-8'); ?></p>
                     <?php endif; ?>
                     <?php if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editEmail'])) {
                         $editEmail = $_POST['editEmail'];
                             if (!filter_var($editEmail, FILTER_VALIDATE_EMAIL)) {
-                                echo "メールアドレスが正しくありません";
+                                echo htmlspecialchars("メールアドレスが正しくありません", ENT_QUOTES, 'UTF-8') ;
                             }
                         }         
                     ?>
@@ -127,7 +128,7 @@ if (isset($_GET['errors'])) {
                    </div>  
                    <input type="text" name="editCommute" value="<?php echo htmlspecialchars($errors['data']['editCommute'] ?? $user->commute_time ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                    <?php if (!empty($errors['messages']['editCommute'])) : ?>
-                        <p><?php echo $errors['messages']['editCommute']; ?></p>
+                        <p><?php echo htmlspecialchars($errors['messages']['editCommute'], ENT_QUOTES, 'UTF-8'); ?></p>
                     <?php endif; ?>  
                 </div>
                 <div>

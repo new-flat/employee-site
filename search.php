@@ -32,9 +32,10 @@
                             <select name="gender">
                                 <option disabled selected>性別を選択してください</option>
                                 <option value="">全て</option>
-                                <option value="1" <?php echo ($gender === '1') ? 'selected' : ''; ?>>男</option>
-                                <option value="2" <?php echo ($gender === '2') ? 'selected' : ''; ?>>女</option>
-                                <option value="null" <?php echo ($gender === 'null') ? 'selected' : ''; ?>>不明</option>
+                                <option value="1" <?php echo $gender === '1' ? 'selected' : ''; ?>>男</option>
+                                <option value="2" <?php echo $gender === '2' ? 'selected' : ''; ?>>女</option>
+                                <option value="null" <?php echo $gender === 'null' ? 'selected' : ''; ?>>不明</option>
+                        </select>
                             </select>
                         </div>
                         <div class="search-option">
@@ -54,7 +55,7 @@
             <section>
                 <div class="list">
                     <?php if ($total_results == 0) : ?>
-                        <p class="error_search"><?php echo $error_message3; ?></p>
+                        <p class="error_search"><?php echo htmlspecialchars($error_message3, ENT_QUOTES, 'UTF-8'); ?></p>
                     <?php else : ?>
                         <table class="table">
                             <thead>
@@ -92,15 +93,15 @@
                                                 if (is_numeric($birthDate)) {
                                                     $currentDate = date('Ymd');
                                                     $age = floor((int)$currentDate - (int)$birthDate) / 10000;
-                                                    echo (int)$age;
+                                                    echo htmlspecialchars((int)$age, ENT_QUOTES, 'UTF-8');
                                                 }
                                             } else {
                                                 echo "不明";
                                             }
                                             ?>
                                         </td>
-                                        <td data-label="生年月日"><?php echo isset($data["birth_date"]) ? htmlspecialchars($data['birth_date'], ENT_QUOTES, 'UTF-8') : "不明"; ?></td>
-                                        <td data-label=""><a class="edit-btn" href="edit.php?id=<?php echo ($data['id']) ?>">編集</a></td>
+                                        <td data-label="生年月日"><?php echo htmlspecialchars(isset($data["birth_date"]), ENT_QUOTES, 'UTF-8') ? htmlspecialchars($data['birth_date'], ENT_QUOTES, 'UTF-8') : "不明"; ?></td>
+                                        <td data-label=""><a class="edit-btn" href="edit.php?id=<?php echo htmlspecialchars(($data['id']) ,ENT_QUOTES, 'UTF-8')?>">編集</a></td>
                                     </tr>
                                 </tbody>
                             <?php endforeach; ?>
@@ -114,35 +115,32 @@
                     <!-- 検索結果が5件以上の場合には、ページネーションが表示 -->
                     <?php if ($total_results > 4) : ?>
                         <!-- ◯件中◯-◯件目を表示 -->
-                        <p><?php echo $total_results; ?>件中<?php echo $from_record ?>-<?php echo $to_record ?>件目を表示</p>
+                        <p><?php echo htmlspecialchars($total_results, ENT_QUOTES, 'UTF-8'); ?>件中<?php echo htmlspecialchars($from_record, ENT_QUOTES, 'UTF-8') ?>-<?php echo htmlspecialchars($to_record, ENT_QUOTES, 'UTF-8') ?>件目を表示</p>
 
                         <!-- 前のページボタン -->
                         <?php if ($page > 1) : ?>
-                            <a class="back_page" href="?<?php echo http_build_query(array_merge($_GET, ['page' => $page - 1])); ?>">
-                                <<< /a>
-                                <?php else : ?>
-                                    <span class="disabled">
-                                        <<< /span>
-                                        <?php endif; ?>
+                            <a class="back_page" href="?<?php echo htmlspecialchars(http_build_query(array_merge($_GET, ['page' => $page - 1])), ENT_QUOTES, 'UTF-8'); ?>">
+                        <?php else : ?>
+                            <span class="disabled"><<<</span>
+                        <?php endif; ?>
 
-                                        <!-- ページ番号リンク -->
-                                        <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
-                                            <?php if ($i >= $page - $range && $i <= $page + $range) : ?>
-                                                <?php if ($i == $page) : ?>
-                                                    <span class="current_page"><?php echo $i; ?></span>
-                                                <?php else : ?>
-                                                    <a class="page_link" href="?<?php echo http_build_query(array_merge($_GET, ['page' => $i])); ?>"><?php echo $i; ?></a>
-                                                <?php endif; ?>
-                                            <?php endif; ?>
-                                        <?php endfor; ?>
-
-                                        <!-- 次のページボタン -->
-                                        <?php if ($page < $total_pages) : ?>
-                                            <a class="next_page" href="?<?php echo http_build_query(array_merge($_GET, ['page' => $page + 1])); ?>">>></a>
-                                        <?php else : ?>
-                                            <span class="disabled">>></span>
-                                        <?php endif; ?>
+                        <!-- ページ番号リンク -->
+                        <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+                            <?php if ($i >= $page - $range && $i <= $page + $range) : ?>
+                                    <?php if ($i == $page) : ?>
+                                        <span class="current_page"><?php echo htmlspecialchars($i, ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <?php else : ?>
+                                        <a class="page_link" href="?<?php echo htmlspecialchars(http_build_query(array_merge($_GET, ['page' => $i])), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($i, ENT_QUOTES, 'UTF-8'); ?></a>
                                     <?php endif; ?>
+                            <?php endif; ?>
+                        <?php endfor; ?>
+                        <!-- 次のページボタン -->
+                        <?php if ($page < $total_pages) : ?>
+                            <a class="next_page" href="?<?php echo htmlspecialchars(http_build_query(array_merge($_GET, ['page' => $page + 1])), ENT_QUOTES, 'UTF-8'); ?>">>></a>
+                        <?php else : ?>
+                            <span class="disabled">>></span>
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </div>
             </section>
         </div>

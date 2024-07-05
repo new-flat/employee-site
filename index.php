@@ -52,7 +52,7 @@ require_once("header.html");
         <section>
             <div class=list>
             <?php  if(empty($data_array)): ?>
-                    <p class = "error_search"><?php echo $error_message3; ?></p>
+                    <p class = "error_search"><?php echo htmlspecialchars($error_message3, ENT_QUOTES, 'UTF-8'); ?></p>
             <?php else: ?>    
                 <table class="table">
                     <thead>
@@ -85,18 +85,17 @@ require_once("header.html");
                             <td data-label="年齢">
                                 <?php 
                                 if ($data["birth_date"] !== null) {
-                                    $birthDate = $data["birth_date"] !== null ? str_replace("-", "", $data["birth_date"]) : null;
+                                    $birthDate = str_replace("-", "", $data["birth_date"]);
                                 // 生年月日から年齢を概算
-                                $age = floor((date('Ymd') - $birthDate) / 10000);
-                                echo $age;
+                                    $age = floor((date('Ymd') - $birthDate) / 10000);
+                                    echo htmlspecialchars($age, ENT_QUOTES, 'UTF-8');
                                 } else {
                                     echo "不明";
-                                }
-                                
+                                }              
                                 ?>
                             </td>
                             <td data-label="生年月日"><?php echo htmlspecialchars($data['birth_date'] ?? '不明', ENT_QUOTES, 'UTF-8'); ?></td>
-                            <td data-label=""><a class="edit-btn" href="edit.php?id=<?php echo($data['id']) ?>">編集</a></td>
+                            <td data-label=""><a class="edit-btn" href="edit.php?id=<?php echo htmlspecialchars($data['id'], ENT_QUOTES, 'UTF-8') ?>">編集</a></td>
 
                         </tr>
                     </tbody>
@@ -110,11 +109,11 @@ require_once("header.html");
             <div class="pageNation">
             <?php if($total_results > 4): ?>       
             <!-- ◯件中◯-◯件目を表示 -->
-                <p><?php echo $total_results; ?>件中<?php echo $from_record ?>-<?php echo $to_record ?>件目を表示</p>
+                <p><?php echo htmlspecialchars($total_results, ENT_QUOTES, 'UTF-8'); ?>件中<?php echo htmlspecialchars($from_record, ENT_QUOTES, 'UTF-8') ?>-<?php echo htmlspecialchars($to_record, ENT_QUOTES, 'UTF-8');?>件目を表示</p>
 
                 <!-- 前のページボタン -->
                 <?php if($page > 1): ?>
-                    <a  class="back_page" href="?<?php echo http_build_query(array_merge($_GET, ['page' => $page - 1])); ?>"><<</a>
+                    <a  class="back_page" href="?<?php echo htmlspecialchars(http_build_query(array_merge($_GET, ['page' => $page - 1])), ENT_QUOTES, 'UTF-8'); ?>"><<</a>
                 <?php else: ?>    
                     <span class="disabled"><<</span>
                 <?php endif; ?>
@@ -123,16 +122,16 @@ require_once("header.html");
                 <?php for($i = 1; $i <= $total_pages; $i++): ?>
                     <?php if($i >= $page - $range && $i <= $page + $range): ?>
                         <?php if($i == $page): ?>
-                            <span class="current_page"><?php echo $i; ?></span>
+                            <span class="current_page"><?php  echo htmlspecialchars($i, ENT_QUOTES, 'UTF-8'); ?></span>
                         <?php else: ?>    
-                            <a class="page_link" href="?<?php echo http_build_query(array_merge($_GET,['page' => $i])); ?>"><?php echo $i; ?></a>
+                            <a class="page_link" href="?<?php echo htmlspecialchars(http_build_query(array_merge($_GET, ['page' => $i])), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($i, ENT_QUOTES, 'UTF-8'); ?></a>
                         <?php endif; ?>
                     <?php endif; ?>
                 <?php endfor; ?> 
                 
                 <!-- 次のページボタン -->
                 <?php if($page < $total_pages): ?>
-                    <a  class="next_page" href="?<?php echo http_build_query(array_merge($_GET, ['page' => $page + 1])); ?>">>></a>  
+                    <a  class="next_page" href="?<?php echo htmlspecialchars(http_build_query(array_merge($_GET, ['page' => $page + 1])), ENT_QUOTES, 'UTF-8'); ?>">>></a>  
                 <?php else: ?>      
                     <span class="disabled">>></span>
                 <?php endif; ?> 

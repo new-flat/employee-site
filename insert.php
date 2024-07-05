@@ -30,7 +30,7 @@ require_once("controll.php");
                 </div>
                 <input type="text" name="insertName" value="<?php echo htmlspecialchars($_POST['insertName'] ?? '', ENT_QUOTES); ?>">
                 <?php if (!empty($errors["insertName"])) : ?>
-                    <p><?php echo $errors["insertName"]; ?></p>
+                    <p><?php echo htmlspecialchars($errors["insertName"], ENT_QUOTES, 'UTF-8'); ?></p>
                 <?php endif; ?>
             </div>
             <div>
@@ -40,7 +40,7 @@ require_once("controll.php");
                 </div>
                 <input type="text" name="insertKana" value="<?php echo htmlspecialchars($_POST['insertKana'] ?? '', ENT_QUOTES); ?>">
                 <?php if (!empty($errors['insertKana'])) : ?>
-                    <p class="error"><?php echo $errors['insertKana']; ?></p>
+                    <p class="error"><?php echo htmlspecialchars($errors['insertKana'], ENT_QUOTES, 'UTF-8'); ?></p>
                 <?php endif; ?>
             </div>
             <div>
@@ -67,12 +67,12 @@ require_once("controll.php");
                 </div>
                     <input type="text" name="insertEmail" value="<?php echo htmlspecialchars($errors['data']['insertEmail']  ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                     <?php if (!empty($errors['insertEmail'])) : ?>
-                        <p class="error"><?php echo $errors['insertEmail']; ?></p>
+                        <p class="error"><?php echo htmlspecialchars($errors['insertEmail'], ENT_QUOTES, 'UTF-8'); ?></p>
                     <?php endif; ?>
                     <?php if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['insertEmail'])) {
                         $insertEmail = $_POST['insertEmail'];
                             if (!filter_var($insertEmail, FILTER_VALIDATE_EMAIL)) {
-                                echo "メールアドレスが正しくありません";
+                                echo htmlspecialchars("メールアドレスが正しくありません", ENT_QUOTES, 'UTF-8');
                             }
                         }         
                     ?>  
@@ -83,7 +83,7 @@ require_once("controll.php");
                    </div>  
                    <input type="type" name="insertCommute" value="<?php echo htmlspecialchars($errors['data']['insertCommute'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                    <?php if (!empty($errors['insertCommute'])) : ?>
-                    <p class="error"><?php echo $errors['insertCommute']; ?></p>
+                    <p class="error"><?php echo htmlspecialchars($errors['insertCommute'], ENT_QUOTES, 'UTF-8'); ?></p>
                    <?php endif; ?>  
                 </div>
                 <div>
@@ -97,13 +97,16 @@ require_once("controll.php");
                         <label><input type="radio" name="insertBlood"  value="AB" <?php echo (isset($_POST['insertBlood']) && $_POST['insertBlood'] === 'AB') ? 'checked' : ''; ?>> AB型</label>
                         <label><input type="radio" name="insertBlood"  value="" <?php echo (isset($_POST['insertBlood']) && $_POST['insertBlood'] === '') ? 'checked' : ''; ?>> 不明</label>
                     </div>
+                    <?php if (!empty($errors['insertBlood'])) : ?>
+                    <p class="error"><?php echo htmlspecialchars($errors['insertBlood'], ENT_QUOTES, 'UTF-8'); ?></p>
+                   <?php endif; ?>  
                 </div> 
                 <div>
                     <div class="label">
                         <label class="insertOption">既婚</label>
                     </div>
                     <div>
-                        <label><input type="radio" name="insertMarried" value="1" <?php echo (isset($_POST['insertMarried']) ) ? 'checked' : 'null' ?>>既婚</label>
+                        <label><input type="radio" name="insertMarried" value="1" <?php echo htmlspecialchars((isset($_POST['insertMarried'])), ENT_QUOTES, 'UTF-8') ? 'checked' : 'null' ?>>既婚</label>
                     </div>
                 </div>
 
