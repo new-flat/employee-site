@@ -6,6 +6,10 @@ require_once("controll.php");
 require_once("error_message.php");
 require_once("header.html");
 
+
+// トークンの作成
+$token = bin2hex(openssl_random_pseudo_bytes(16));
+
 ?>
 
 <!DOCTYPE html>
@@ -20,6 +24,7 @@ require_once("header.html");
     <div id="main" class="wrapper">
         <section class="">
             <form  class="search-container" action="search.php" method="get">
+                <input type="hidden" name="csrf_token" value="' . htmlspecialchars($_SESSION['csrf_token']) . ''">
                 <div class="search-box">
                     <input type="text" name="name" placeholder="氏名を検索" value="<?php echo htmlspecialchars($name_value, ENT_QUOTES, 'UTF-8'); ?>">
                     <button type="submit" value="検索" name="search">🔍</button>
@@ -29,7 +34,7 @@ require_once("header.html");
                         <p>性別で探す</p>
                         <select name="gender">
                             <option disabled selected >性別を選択してください</option>
-                            <option value="">全て</option>
+                            <option value="" <?php echo ($gender === '') ? 'selected' : ''; ?>>全て</option>
                             <option value="1" <?php echo ($gender === 1) ? 'selected' : ''; ?>>男</option>
                             <option value="2" <?php echo ($gender === 2) ? 'selected' : ''; ?>>女</option>
                             <option value="null" <?php echo ($gender === null) ? 'selected' : ''; ?>>不明</option>

@@ -6,6 +6,14 @@
     require_once("controll.php");
     require_once("error_message.php");
 
+ 
+    // トークンを生成し、セッションに保存
+    if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(openssl_random_pseudo_bytes(32));
+    }
+
+    
+
     ?>
 
     <!DOCTYPE html>
@@ -31,11 +39,11 @@
                             <p>性別で探す</p>
                             <select name="gender">
                                 <option disabled selected>性別を選択してください</option>
-                                <option value="">全て</option>
+                                <option value="" <?php echo $gender === '' ? 'selected' : ''; ?>>全て</option>
                                 <option value="1" <?php echo $gender === '1' ? 'selected' : ''; ?>>男</option>
                                 <option value="2" <?php echo $gender === '2' ? 'selected' : ''; ?>>女</option>
                                 <option value="null" <?php echo $gender === 'null' ? 'selected' : ''; ?>>不明</option>
-                        </select>
+                            </select>
                             </select>
                         </div>
                         <div class="search-option">
