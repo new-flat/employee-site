@@ -2,7 +2,7 @@
 
 <?php
 
-require_once("header.html");
+require_once("header.php");
 require_once("controll.php");
 
 ?>
@@ -23,6 +23,7 @@ require_once("controll.php");
             <p style="margin:0">登録しました</p>
         <?php endif ?>
         <form action="insert_send.php" method="POST" class="insert-class">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
             <div>
                 <div class="label">
                     <label class="insertLabel">氏名</label>

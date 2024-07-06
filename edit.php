@@ -1,6 +1,8 @@
 <?php
 
-require_once("header.html");
+
+require_once("header.php"); // セッション開始とCSRFトークン生成
+
 require_once("error_message.php");
 
 $errors = array();
@@ -17,7 +19,6 @@ if (isset($_GET["id"])) {
         if ($user->email === "0") {
             $user->email = null;
         }
-
 
         if (!$user) {
             $errors['id'] = $error_message5;
@@ -59,6 +60,7 @@ if (isset($_GET['errors'])) {
             <p style="margin:0"><?php echo htmlspecialchars($errors['id'], ENT_QUOTES, 'UTF-8'); ?></p>
         <?php else : ?>
             <form action="edit_send2.php" method="POST" class="edit-class">
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8'); ?>">
                 <div>
                     <div class="label">
@@ -69,7 +71,6 @@ if (isset($_GET['errors'])) {
                     <?php if (!empty($errors['messages']['editName'])) : ?>
                         <p><?php echo htmlspecialchars($errors['messages']['editName'], ENT_QUOTES, 'UTF-8'); ?></p>
                     <?php endif; ?>
-
                 </div>
                 <div>
                     <div class="label">
@@ -80,7 +81,6 @@ if (isset($_GET['errors'])) {
                     <?php if (!empty($errors['messages']['editKana'])) : ?>
                         <p class="error"><?php echo htmlspecialchars($errors['messages']['editKana'], ENT_QUOTES, 'UTF-8'); ?></p>
                     <?php endif; ?>
-
                 </div>
                 <div>
                     <div class="label">
@@ -116,20 +116,19 @@ if (isset($_GET['errors'])) {
                     <?php if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editEmail'])) {
                         $editEmail = $_POST['editEmail'];
                             if (!filter_var($editEmail, FILTER_VALIDATE_EMAIL)) {
-                                echo htmlspecialchars("メールアドレスが正しくありません", ENT_QUOTES, 'UTF-8') ;
+                                echo htmlspecialchars("メールアドレスが正しくありません", ENT_QUOTES, 'UTF-8');
                             }
-                        }         
+                        }
                     ?>
-                    
-                </div> 
+                </div>
                 <div>
                    <div class="label">
                         <label class="insertOption">通勤時間(分)</label>
-                   </div>  
+                   </div>
                    <input type="text" name="editCommute" value="<?php echo htmlspecialchars($errors['data']['editCommute'] ?? $user->commute_time ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                    <?php if (!empty($errors['messages']['editCommute'])) : ?>
                         <p><?php echo htmlspecialchars($errors['messages']['editCommute'], ENT_QUOTES, 'UTF-8'); ?></p>
-                    <?php endif; ?>  
+                    <?php endif; ?>
                 </div>
                 <div>
                     <div class="label">
@@ -138,16 +137,16 @@ if (isset($_GET['errors'])) {
                     <div>
                         <label><input type="radio" name="editBlood" value="A" <?php if (($errors['data']['editBlood'] ?? $user->blood_type) == "A") {
                                             echo "checked";}; ?>> A型</label>
-                        <label><input type="radio" name="editBlood"  value="B" <?php if (($errors['data']['editBlood'] ?? $user->blood_type) == "B") {
+                        <label><input type="radio" name="editBlood" value="B" <?php if (($errors['data']['editBlood'] ?? $user->blood_type) == "B") {
                                             echo "checked";}; ?>> B型</label>
-                        <label><input type="radio" name="editBlood"  value="O" <?php if (($errors['data']['editBlood'] ?? $user->blood_type) == "O") {
+                        <label><input type="radio" name="editBlood" value="O" <?php if (($errors['data']['editBlood'] ?? $user->blood_type) == "O") {
                                             echo "checked";}; ?>> O型</label>
-                        <label><input type="radio" name="editBlood"  value="AB" <?php if (($errors['data']['editBlood'] ?? $user->blood_type) == "AB") {
+                        <label><input type="radio" name="editBlood" value="AB" <?php if (($errors['data']['editBlood'] ?? $user->blood_type) == "AB") {
                                             echo "checked";}; ?>> AB型</label>
-                        <label><input type="radio" name="editBlood"  value="" <?php if (($errors['data']['editBlood'] ?? $user->blood_type) == "") {
+                        <label><input type="radio" name="editBlood" value="" <?php if (($errors['data']['editBlood'] ?? $user->blood_type) == "") {
                                             echo "checked";}; ?>> 不明</label>
                     </div>
-                </div> 
+                </div>
                 <div>
                     <div class="label">
                         <label class="insertOption">既婚</label>
@@ -156,7 +155,7 @@ if (isset($_GET['errors'])) {
                         <label><input type="radio" name="editMarried" value="1" <?php if (($errors['data']['editMarried'] ?? $user->married) == 1) {
                                             echo "checked";}; ?>>既婚</label>
                     </div>
-                </div>               
+                </div>
                 <!-- 保存ボタン -->
                 <input class="edit-submit" type="submit" value="保存" name="edit">
             </form>
