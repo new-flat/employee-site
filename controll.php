@@ -2,9 +2,16 @@
 
 $data_array = array();
 
+// XSS対策
+function eh($str) {
+    return htmlspecialchars($str,ENT_QUOTES, 'UTF-8');
+}
+
 // DB接続
 try {
-    $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root");
+    $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root", [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
 } catch(PDOException $e) {
     echo $e->getMessage();
 }
@@ -18,8 +25,6 @@ $params = array();
 $name = isset($_GET["name"]) ? $_GET["name"] : '';
 $gender = isset($_GET["gender"]) ? $_GET["gender"] : 'null';
 $page = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
-
-
 
 //1ページあたりのアイテム数 
 $limit = 5;
