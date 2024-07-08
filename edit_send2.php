@@ -5,12 +5,14 @@ require_once("controll.php");
 require_once("error_message.php");
 require_once("header.php"); // セッション開始とCSRFトークン生成
 
+$errors = array();
+
 // トークンが送信されているか確認
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token'])) {
-        die('CSRF token is missing.');
-    }
 
+    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token'])) {
+        die('リクエストが無効です');
+    }
 
     // トークンが一致するか確認　
     // ⏬なぜhash_equalsを使うのか？
@@ -30,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $editMarried = $_POST['editMarried'] ?? null;
 
     } else {
-        die ("無効なCSRFトークン");
+        die ("リクエストが無効です");
     }
 
     $errors = array();
@@ -63,32 +65,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 編集データをDBに登録
     if (empty($errors)) {
         try {
-            $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root");
+            $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root", [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            ]);
+
+            //トランザクション内のすべての操作が成功した場合のみデータベースに反映。一つでも失敗した場合はすべての操作を取り消し
+            $pdo->beginTransaction();
+
             $update_sql = "UPDATE `php-test` SET username = :username, kana = :kana, gender = :gender, birth_date = :birth_date, email = :email, commute_time = :commute_time, blood_type = :blood_type, married = :married WHERE id = :id";
             $update_stmt = $pdo->prepare($update_sql);
-            $update_stmt->bindValue(':username', $editName);
-            $update_stmt->bindValue(':kana', $editKana);
+            $update_stmt->bindValue(':username', $editName, PDO::PARAM_STR);
+            $update_stmt->bindValue(':kana', $editKana, PDO::PARAM_STR);
             $update_stmt->bindValue(':gender', $editGender === '' ? null : $editGender, PDO::PARAM_INT);
-            $update_stmt->bindValue(':birth_date', $editDate);
-            $update_stmt->bindValue(':email', $editEmail);
+            $update_stmt->bindValue(':birth_date', $editDate, PDO::PARAM_STR);
+            $update_stmt->bindValue(':email', $editEmail, PDO::PARAM_STR);
             $update_stmt->bindValue(':commute_time', $editCommute === '' ? null : $editCommute, PDO::PARAM_INT);
             $update_stmt->bindValue(':blood_type', $editBlood, PDO::PARAM_STR);
             $update_stmt->bindValue(':married', $editMarried === '' ? null : $editMarried, PDO::PARAM_INT);
             $update_stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
-            if ($update_stmt->execute()) {
-                // 成功したら同じページ（edit.php）に戻り、URLを追加してメッセージを表示
-                header("Location: edit.php?id=" . $id . "&success=2");
-                // リダイレクト後に不要なコードが実行されないようにする
-                exit;
-            } else {
-                echo "登録に失敗しました";
-            }
+            $update_stmt->execute();
+            // 'commit'メソッドを使用して、トランザクション内のすべての操作を確定
+            $pdo->commit();            
+            
+            // 成功したら同じページ（edit.php）に戻り、URLを追加してメッセージを表示
+            header("Location: edit.php?id=" . $id . "&success=2");
+            // リダイレクト後に不要なコードが実行されないようにする
+            exit;
+
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            // トランザクション内でエラーが発生した場合、操作を取り消し
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            // エラーメッセージをログに記録
+            error_log($e->getMessage());
         }
 
         $pdo = null;
+
     } else {
         // エラーがある場合はフォームに戻る
         $error_data = [

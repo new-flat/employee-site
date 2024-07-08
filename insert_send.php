@@ -7,10 +7,10 @@ $errors = array();
 
 // CSRF対策用トークンが送信されているか確認
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token'])) {
-        die("CSRFトークンがありません");
-    }
 
+    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token'])) {
+        die("リクエストが無効です");
+    }
 
     // トークンが一致するか確認　
     // ⏬なぜhash_equalsを使うのか？
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 常に一定の時間をかけるため、タイミング攻撃を防止するのに適しています。
     if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
         // トークンが一致しない場合
-        die ("無効なCSRFトークン");
+        die ("リクエストが無効です");
     }   
 
     $insertName = $_POST['insertName'];
@@ -56,28 +56,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         // DB接続
         try {
-            $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root");
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-        $sql = "INSERT INTO `php-test` (`username`, `kana`, `gender`, `birth_date`, `email`, `commute_time`, `blood_type`, `married`) VALUES (:username, :kana, :gender, :birth_date, :email, :commute_time, :blood_type, :married)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':username', $insertName, PDO::PARAM_STR);
-        $stmt->bindValue(':kana', $insertKana, PDO::PARAM_STR);
-        $stmt->bindValue(':gender', $insertGender, PDO::PARAM_INT);
-        $stmt->bindValue(':birth_date', $insertDate, PDO::PARAM_STR);
-        $stmt->bindValue(':email', $insertEmail, PDO::PARAM_STR);
-        $stmt->bindValue(':commute_time', $insertCommute, PDO::PARAM_INT);
-        $stmt->bindValue(':blood_type', $insertBlood, PDO::PARAM_INT);
-        $stmt->bindValue(':married', $insertMarried, PDO::PARAM_INT);
+            $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root",[
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            ]);
+
+            //トランザクション内のすべての操作が成功した場合のみデータベースに反映。一つでも失敗した場合はすべての操作を取り消し
+            $pdo->beginTransaction();
+
+            $sql = "INSERT INTO `php-test` (`username`, `kana`, `gender`, `birth_date`, `email`, `commute_time`, `blood_type`, `married`) VALUES (:username, :kana, :gender, :birth_date, :email, :commute_time, :blood_type, :married)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':username', $insertName, PDO::PARAM_STR);
+            $stmt->bindValue(':kana', $insertKana, PDO::PARAM_STR);
+            $stmt->bindValue(':gender', $insertGender, PDO::PARAM_INT);
+            $stmt->bindValue(':birth_date', $insertDate, PDO::PARAM_STR);
+            $stmt->bindValue(':email', $insertEmail, PDO::PARAM_STR);
+            $stmt->bindValue(':commute_time', $insertCommute, PDO::PARAM_INT);
+            $stmt->bindValue(':blood_type', $insertBlood, PDO::PARAM_INT);
+            $stmt->bindValue(':married', $insertMarried, PDO::PARAM_INT);
         
-        if ($stmt->execute()) {
-            // 成功したら同じページ（insert.php）に戻り、URLを追加してメッセージを表示
+            $stmt->execute();
+            // 'commit'メソッドを使用して、トランザクション内のすべての操作を確定
+            $pdo->commit();
+
+            // 同じページ（insert.php）に戻り、URLを追加してメッセージを表示
             header('Location: insert.php?success=1');
             // リダイレクト後に不要なコードが実行されないようにする
             exit;
-        } else {
-            echo '登録に失敗しました';
+
+        } catch (PDOException $e) {
+            // トランザクション内でエラーが発生した場合、操作を取り消し
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            // エラーメッセージをログに記録
+            error_log($e->getMessage());
         }
 
         $pdo = null;
