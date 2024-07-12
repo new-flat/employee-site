@@ -20,7 +20,7 @@
 <body>
     <div id="header" class="wrapper">
         <ul class="menu">
-            <li class="menu_item"><a href="index.php" class="menu_btn">社員一覧</a></li>
+            <li class="menu_item"><a href="employee_list.php" class="menu_btn">社員一覧</a></li>
             <li class="menu_item"><a href="insert.php" class="menu_btn">社員登録</a></li>
         </ul>
     </div>
