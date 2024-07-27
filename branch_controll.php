@@ -1,17 +1,8 @@
 <?php
 
-$data_array = array();
-$branch_stmt = []; // 例: 空の配列で初期化
-
 // XSS対策
 function eh($str) {
     return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
-}
-
-// ページ番号の取得
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-if ($page < 1) {
-    $page = 1;
 }
 
 // DB接続
@@ -21,39 +12,45 @@ try {
     ]);
 } catch(PDOException $e) {
     echo $e->getMessage();
-    exit;
+    exit; 
 }
 
-// SQLクエリの作成
-$sql = "SELECT `id`, `branch_name`, `tel`, `address` FROM `branch`" ;
-
-// カウントクエリの作成
-$count_sql = "SELECT COUNT(*) FROM `branch`";
-$params = array();
-
-// 検索条件の処理
-if (isset($_GET['branch_name']) && $_GET['branch_name'] !== '') {
-    $branch_name = $_GET['branch_name'];
-    $sql .= " AND `branch_name` LIKE :branch_name";
-    $count_sql .= " AND `branch_name` LIKE :branch_name";
-    $params[':branch_name'] = '%' . $branch_name . '%';
-}
-
+// パラメータの取得
+$branchName = isset($_GET["branch_name"]) ? $_GET["branch_name"] : '';
+$page = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
 
 //1ページあたりのアイテム数 
 $limit = 5;
+
 // データ取得のためのオフセットを計算
 $offset = ($page - 1) * $limit;
 
+// SQLクエリの作成
+$sql = "SELECT * FROM `branch` WHERE 1=1" ;
+
+// カウントクエリの作成
+$count_sql = "SELECT COUNT(*) FROM `branch` WHERE 1=1";
+$params = [];
+
+
+// 検索出力条件
+if (!empty($branchName)) {
+    $sql .= " AND `branch_name` LIKE :branch_name" ;
+    $count_sql .= " AND `branch_name` LIKE :branch_name";
+    $params[':branch_name'] = '%' . $branchName . '%';
+} 
+
+// クエリ実行
 try {
     // PDOを使用してカウントクエリ実行、該当レコードの総数を取得
     $stmt = $pdo->prepare($count_sql);
     $stmt->execute($params);
     $total_results = $stmt->fetchColumn();
     // 全ページ数の計算
-    $total_pages = ceil($total_results / $limit);
+    $total_pages = max(ceil($total_results / $limit), 1);//最低1ページ
 
     // データクエリ取得の実行
+    // LIMITとOFFSETを使って特定の範囲のデータだけを取得する
     $sql .= " LIMIT :limit OFFSET :offset";
     $stmt = $pdo->prepare($sql);
     foreach ($params as $key => $value) {
@@ -64,7 +61,8 @@ try {
     $stmt->execute();
     $data_array = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    echo $e->getMessage();
+    error_log($e->getMessage());
+    echo "データベースエラーが発生しました。もう一度お試しください。";
     exit;
 }
 
@@ -82,5 +80,31 @@ if ($page == 1 || $page == $total_pages) {
 
 // DBの接続を閉じる
 $pdo = null;
+
+// 支店編集
+$errors = array();
+$user = null;
+
+if (isset($_GET["id"])) {
+    try {
+        $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root");
+        $edit_sql = "SELECT * FROM `branch` WHERE id = :id";
+        $edit_stmt = $pdo->prepare($edit_sql);
+        $edit_stmt->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
+        $edit_stmt->execute();
+        $user = $edit_stmt->fetch(PDO::FETCH_OBJ); // 1件のデータを取得
+
+        if (!$user) {
+            $errors['id'] = $error_message5;
+            exit;
+        } 
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+        exit;
+    }
+} else {
+    $errors['id'] = $error_message5;
+}
+
 
 ?>

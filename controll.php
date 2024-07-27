@@ -1,7 +1,5 @@
 <?php
 
-$data_array = array();
-
 // XSS対策
 function eh($str) {
     return htmlspecialchars($str,ENT_QUOTES, 'UTF-8');
@@ -16,47 +14,30 @@ try {
     echo $e->getMessage();
 }
 
-// SQLクエリの作成
-$sql = "SELECT `id`, `username`, `kana`, `gender`, `birth_date` FROM `php-test` WHERE 1" ;
-// カウントクエリの作成
-$count_sql = "SELECT COUNT(*) FROM `php-test`where 1";
-$params = array();
-
-$name = isset($_GET["name"]) ? $_GET["name"] : '';
-$gender = isset($_GET["gender"]) ? $_GET["gender"] : 'null';
-$page = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
+// パラメータの取得
+$name = $_GET["name"] ?? '';
+$gender = $_GET["gender"] ?? 'null';
+$page = (int)($_GET["page"] ?? 1);
 
 //1ページあたりのアイテム数 
 $limit = 5;
+
 // データ取得のためのオフセットを計算
 $offset = ($page - 1) * $limit;
 
-// 全ページ数の計算：総件数20件、1ページあたり5件表示する場合、全ページはceil(20 / 5) = 4
-$index_sql = "SELECT * FROM `php-test`"; 
-
-$index_stmt = $pdo->query($index_sql);
-
-$index_sql .= " LIMIT :limit OFFSET :offset";
-$index_stmt = $pdo->prepare($index_sql);
-foreach ($params as $key => $value) {
-    $index_stmt->bindValue($key, $value);
-}
-    $index_stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-    $index_stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-    $index_stmt->execute();    
+// SQLクエリの作成
+$sql = "SELECT * FROM `php-test` WHERE 1" ;
+// カウントクエリの作成
+$count_sql = "SELECT COUNT(*) FROM `php-test` WHERE 1";
+$params = [];
 
 // 検索出力条件
 if (!empty($name)) {
     $sql .= " AND (`username` LIKE :name OR `kana` LIKE :kana)";
     $count_sql .= " AND (`username` LIKE :name OR `kana` LIKE :kana)";
-    $params[':name'] = '%' . $name . '%';
-    $params[':kana'] = '%' . $name . '%';
-    $name_value = $_GET['name'];
-} else {
-    $name_value = '';
+    $params[':name'] = $params[':kana'] = '%' . $name . '%';
 }
 
-// 検索ボタンが押された時
 if (isset($_GET['search'])) {
     if($gender === 'null') {
         $sql .= " AND `gender` IS NULL";
@@ -87,9 +68,11 @@ try {
     $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
-    $data_array = $stmt->fetchAll();
+    $data_array = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    echo $e->getMessage();
+    error_log($e->getMessage());
+    echo "データベースエラーが発生しました。もう一度お試しください。";
+    exit;
 }
 
 // ページネーション：◯件目ー◯件目を表示
@@ -109,7 +92,7 @@ if ($page == 1 || $page == $total_pages) {
     $range = 2;
 }
 
-// DBの接続を閉じる
+// DBの接続を閉じる 
 $pdo = null
 
 ?>
