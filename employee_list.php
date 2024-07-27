@@ -1,10 +1,8 @@
 <!-- 初期画面 -->
 
 <?php
-
+require_once("header.php");
 require_once("controll.php");
-require_once("error_message.php");
-
 
 ?>
 
@@ -19,10 +17,10 @@ require_once("error_message.php");
 <body>
     <div id="main" class="wrapper">
         <section class="">
-            <form  class="search-container" action="search.php" method="get">
+            <form  class="search-container" action="employee_search.php" method="get">
                 <input type="hidden" name="csrf_token" value="<?php  eh($_SESSION['csrf_token']); ?>">
                 <div class="search-box">
-                    <input type="text" name="name" placeholder="氏名を検索" value="<?php echo eh($name_value); ?>">
+                    <input type="text" name="name" placeholder="氏名を検索" value="<?php echo eh($name); ?>">
                     <button type="submit" value="検索" name="search">🔍</button>
                 </div>
                 <div class="search-buttons">
@@ -53,7 +51,7 @@ require_once("error_message.php");
         <section>
             <div class=list>
             <?php  if(empty($data_array)): ?>
-                    <p class = "error_search"><?php echo eh($error_message3); ?></p>
+                    <p class = "error_search">該当する社員がいません</p>
             <?php else: ?>    
                 <table class="table">
                     <thead>
@@ -66,77 +64,17 @@ require_once("error_message.php");
                             <th class="table-title"></th>
                         </tr>
                     </thead>
-
-                    <?php foreach($index_stmt as $data): ?>
-                    <tbody>
-                        <tr>
-                            <th><?php echo eh($data["username"]); ?></th>
-                            <td data-label="かな"><?php echo eh($data['kana']); ?></td>
-                            <td data-label="性別">
-                                <?php 
-                                    if($data["gender"] === 1){
-                                        echo "男";
-                                    } elseif($data["gender"] === 2) {
-                                        echo "女";
-                                    } else {
-                                        echo "不明";
-                                    }
-                                ?>
-                            </td>
-                            <td data-label="年齢">
-                                <?php 
-                                if ($data["birth_date"] !== null) {
-                                    $birthDate = str_replace("-", "", $data["birth_date"]);
-                                // 生年月日から年齢を概算
-                                    $age = floor((date('Ymd') - $birthDate) / 10000);
-                                    echo eh($age, ENT_QUOTES, 'UTF-8');
-                                } else {
-                                    echo "不明";
-                                }              
-                                ?>
-                            </td>
-                            <td data-label="生年月日"><?php echo eh($data['birth_date'] ?? '不明'); ?></td>
-                            <td data-label=""><a class="edit-btn" href="edit.php?id=<?php echo eh($data['id']) ?>">編集</a></td>
-
-                        </tr>
-                    </tbody>
-                    <?php endforeach; ?>
+                    <!-- 検索結果一覧テーブル -->
+                    <?php require_once('process.php'); ?>
                 </table>
             <?php endif; ?>  
             </div>
         </section>
 
         <section>
+            <!-- 検索結果が5件以上の場合パージネーション表示 -->
             <div class="pageNation">
-            <?php if($total_results > 4): ?>       
-            <!-- ◯件中◯-◯件目を表示 -->
-                <p><?php echo eh($total_results); ?>件中<?php echo eh($from_record) ?>-<?php echo eh($to_record);?>件目を表示</p>
-
-                <!-- 前のページボタン -->
-                <?php if($page > 1): ?>
-                    <a  class="back_page" href="?<?php echo eh(http_build_query(array_merge($_GET, ['page' => $page - 1]))); ?>"><<</a>
-                <?php else: ?>    
-                    <span class="disabled"><<</span>
-                <?php endif; ?>
-                
-                <!-- ページ番号リンク -->
-                <?php for($i = 1; $i <= $total_pages; $i++): ?>
-                    <?php if($i >= $page - $range && $i <= $page + $range): ?>
-                        <?php if($i == $page): ?>
-                            <span class="current_page"><?php  echo eh($i); ?></span>
-                        <?php else: ?>    
-                            <a class="page_link" href="?<?php echo eh(http_build_query(array_merge($_GET, ['page' => $i]))); ?>"><?php echo eh($i); ?></a>
-                        <?php endif; ?>
-                    <?php endif; ?>
-                <?php endfor; ?> 
-                
-                <!-- 次のページボタン -->
-                <?php if($page < $total_pages): ?>
-                    <a  class="next_page" href="?<?php echo eh(http_build_query(array_merge($_GET, ['page' => $page + 1]))); ?>">>></a>  
-                <?php else: ?>      
-                    <span class="disabled">>></span>
-                <?php endif; ?> 
-            <?php endif; ?>       
+                <?php require_once('page_nation.php'); ?>
             </div>
         </section>  
     </div>
