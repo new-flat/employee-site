@@ -34,6 +34,15 @@ a {
     border-right: 1px solid #e5e5e5;
 }
 
+/* 支店一覧 */
+.title_branch {
+    margin: 0;
+    color: white;
+    background-color: #444;
+    align-items: center;
+    padding: 20px;
+}
+
 /* 各メニューリンク */
 .wrapper .menu_btn { 
     color: white;
@@ -59,6 +68,7 @@ a {
     padding: 25px 50px;
     font-size: 25px;
     font-weight: bold;
+    margin: 0;
 }
 
 
@@ -125,6 +135,14 @@ a {
     border: none;
 }
 
+.search-branch p {
+    color: white;
+    border-left: rgb(252, 131, 32) solid 0.5px;
+    padding-left: 9px;
+    margin: 0;
+    margin-bottom: 7px;
+}
+
 /* 検索結果テーブル */
 .list {
     margin-bottom: 80px;
@@ -134,7 +152,7 @@ a {
     border-collapse: collapse;
     text-align: center;
     margin: auto;
-    width: 50%;
+    /* p； */
 }
 
 .table th, .table td {
