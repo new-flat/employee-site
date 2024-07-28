@@ -17,7 +17,7 @@ if (empty($_SESSION['csrf_token'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href='/php_lesson/css/style.css'>
 </head>
 <body>
     <div id="main" class="wrapper">
@@ -54,7 +54,7 @@ if (empty($_SESSION['csrf_token'])) {
 
         <section>
             <div class="list">
-                <?php if ($total_results == 0) : ?>
+                <?php if ($totalResults == 0) : ?>
                     <p class="error_search"><?php echo eh($error_message3); ?></p>
                 <?php else : ?>
                     <table class="table">

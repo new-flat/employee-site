@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
             );
             $updateSql = "UPDATE `php-test` 
-                          SET username = :username, kana = :kana, gender = :gender, 
+                          SET username = :username, kana = :kana, branch_name = :branch_name, gender = :gender, 
                               birth_date = :birth_date, email = :email, commute_time = :commute_time, 
                               blood_type = :blood_type, married = :married 
                           WHERE id = :id";

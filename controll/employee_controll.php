@@ -78,4 +78,21 @@ try {
 
 // ページネーション：◯件目ー◯件目を表示
 $fromRecord = ($page - 1) * $limit + 1;
-if ($page == $totalPa
+if ($page == $totalPages && $totalResults % $limit !== 0) {
+    $toRecord = ($page - 1) * $limit + $totalResults % $limit;
+} else {
+    $toRecord = $page * $limit;
+}
+
+// 最大5個までページネーションの数字ボタンの範囲を表示
+if ($page == 1 || $page == $totalPages) {
+    $range = 4;
+} elseif ($page == 2 || $page == $totalPages - 1) {
+    $range = 3;
+} else {
+    $range = 2;
+}
+
+// DBの接続を閉じる
+$pdo = null;
+?>

@@ -1,6 +1,6 @@
 <?php
-require_once 'branch_controll.php';
-require_once 'branch_function.php';
+require_once __DIR__ . '/../controll/branch_controll.php';
+require_once __DIR__ . '/../controll/branch_function.php';
 
 // トークンを生成し、セッションに保存
 if (empty($_SESSION['csrf_token'])) {
@@ -14,7 +14,7 @@ if (empty($_SESSION['csrf_token'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>支店一覧</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href='/php_lesson/css/style.css'>
 </head>
 <body>
     <div id="main" class="wrapper">
@@ -35,7 +35,7 @@ if (empty($_SESSION['csrf_token'])) {
 
         <section>
             <div class="list">
-                <?php if ($total_results == 0) : ?>
+                <?php if ($totalResults == 0) : ?>
                     <p class="error_search">該当する支店がありません</p>
                 <?php else : ?>
                     <table class="table">
@@ -48,7 +48,7 @@ if (empty($_SESSION['csrf_token'])) {
                             </tr>
                         </thead>
                         <!-- 検索結果一覧テーブル -->
-                        <?php require_once 'branch_process.php'; ?>
+                        <?php require_once __DIR__ . '/../search_result/branch_process.php'; ?>
                     </table>
                 <?php endif; ?>
             </div>
@@ -57,7 +57,7 @@ if (empty($_SESSION['csrf_token'])) {
         <section>
             <!-- 検索結果が5件以上の場合パージネーション表示 -->
             <div class="pageNation">
-                <?php require_once 'page_nation.php'; ?>
+            <?php require_once __DIR__ . '/../standardize/page_nation.php'; ?>
             </div>
         </section>
     </div>

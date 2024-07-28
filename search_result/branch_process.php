@@ -1,4 +1,7 @@
-<?php foreach ($data_array as $data) : ?>
+<?php 
+require_once __DIR__ . '/../controll/branch_controll.php'; 
+?>
+<?php foreach ($dataArray as $data) : ?>
     <tbody>
         <tr>
             <th><?php echo eh($data['branch_name']); ?></th>

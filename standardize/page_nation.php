@@ -1,6 +1,10 @@
-<?php if ($total_results > 4) : ?>
+<?php 
+require_once __DIR__ . '/../controll/branch_controll.php'; 
+?>
+
+<?php if ($totalResults > 4) : ?>
     <!-- ◯件中◯-◯件目を表示 -->
-    <p><?php echo eh($total_results); ?>件中<?php echo eh($from_record); ?>-<?php echo eh($to_record); ?>件目を表示</p>
+    <p><?php echo eh($totalResults); ?>件中<?php echo eh($fromRecord); ?>-<?php echo eh($toRecord); ?>件目を表示</p>
 
     <!-- 前のページボタン -->
     <?php if ($page > 1) : ?>
@@ -10,7 +14,7 @@
     <?php endif; ?>
 
     <!-- ページ番号リンク -->
-    <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+    <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
         <?php if ($i >= $page - $range && $i <= $page + $range) : ?>
             <?php if ($i == $page) : ?>
                 <span class="current_page"><?php echo eh($i); ?></span>
@@ -21,7 +25,7 @@
     <?php endfor; ?>
 
     <!-- 次のページボタン -->
-    <?php if ($page < $total_pages) : ?>
+    <?php if ($page < $totalPages) : ?>
         <a class="next_page" href="?<?php echo eh(http_build_query(array_merge($_GET, ['page' => $page + 1]))); ?>">>></a>
     <?php else : ?>
         <span class="disabled">>></span>

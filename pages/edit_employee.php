@@ -81,6 +81,15 @@ if (isset($_GET['errors'])) {
                 </div>
                 <div>
                     <div class="label">
+                        <label class="insertBranch">部門</label> 
+                    </div>
+                    <select name="editBranch">
+                        <option value="">支店を選択</option>
+                        
+                    </select>
+                </div>
+                <div>
+                    <div class="label">
                         <label class="insertOption">性別</label>
                     </div>
                     <select name="editGender">

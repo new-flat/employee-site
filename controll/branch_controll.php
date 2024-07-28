@@ -93,7 +93,7 @@ if (isset($_GET['id'])) {
         $user = $editStmt->fetch(PDO::FETCH_OBJ); // 1件のデータを取得
 
         if (!$user) {
-            $errors['id'] = $errorMessage5;
+            $errors['id'] = "URLが間違っています";
             exit;
         }
     } catch (PDOException $e) {
@@ -101,6 +101,6 @@ if (isset($_GET['id'])) {
         exit;
     }
 } else {
-    $errors['id'] = $errorMessage5;
+    $errors['id'] =  "URLが間違っています";
 }
 ?>

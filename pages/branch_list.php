@@ -1,6 +1,6 @@
 <?php
-require_once 'branch_controll.php';
-require_once 'branch_function.php';
+require_once __DIR__ . '/../controll/branch_controll.php';
+require_once __DIR__ . '/../controll/branch_function.php';
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +9,7 @@ require_once 'branch_function.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>支店一覧</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href='/php_lesson/css/style.css'>
 </head>
 <body>
     <div id="main" class="wrapper">
@@ -26,7 +26,7 @@ require_once 'branch_function.php';
 
         <section>
             <div class="list">
-                <?php if (empty($data_array)) : ?>
+                <?php if (empty($dataArray)) : ?>
                     <p class="error_search">該当する支店がありません</p>
                 <?php else : ?>
                     <table class="table">
@@ -39,7 +39,7 @@ require_once 'branch_function.php';
                             </tr>
                         </thead>
                         <!-- 検索結果一覧テーブル -->
-                        <?php require_once 'branch_process.php'; ?>
+                        <?php require_once __DIR__ . '/../search_result/branch_process.php'; ?>
                     </table>
                 <?php endif; ?>
             </div>
@@ -47,7 +47,7 @@ require_once 'branch_function.php';
 
         <section>
             <div class="pageNation">
-                <?php require_once 'page_nation.php'; ?>
+                <?php require_once __DIR__ . '/../standardize/page_nation.php'; ?>
             </div>
         </section>
     </div>
