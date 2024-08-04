@@ -1,10 +1,8 @@
 <?php
 
-// XSS対策
-function eh($str)
-{
-    return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
-}
+require_once 'xss.php';
+require_once __DIR__ . '/../class/employee_class.php';
+
 
 // DB接続
 try {
@@ -56,11 +54,9 @@ try {
     $stmt = $pdo->prepare($countSql);
     $stmt->execute($params);
     $totalResults = $stmt->fetchColumn();
-    // 全ページ数の計算：総件数20件、1ページあたり5件表示する場合、全ページはceil(20 / 5) = 4
     $totalPages = ceil($totalResults / $limit);
 
     // データクエリ取得の実行
-    // LIMITとOFFSETを使って特定の範囲のデータだけを取得する
     $sql .= ' LIMIT :limit OFFSET :offset';
     $stmt = $pdo->prepare($sql);
     foreach ($params as $key => $value) {
@@ -70,6 +66,12 @@ try {
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
     $dataArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Employeeクラスのインスタンスを作成
+    $employees = [];
+    foreach ($dataArray as $data) {
+        $employees[] = new Employee($data);
+    }
 } catch (PDOException $e) {
     error_log($e->getMessage());
     echo 'データベースエラーが発生しました。もう一度お試しください。';
@@ -95,4 +97,5 @@ if ($page == 1 || $page == $totalPages) {
 
 // DBの接続を閉じる
 $pdo = null;
+
 ?>

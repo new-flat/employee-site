@@ -1,37 +1,23 @@
-<?php foreach ($data_array as $data) : ?>
+
+<?php 
+require_once __DIR__ . '/../controll/employee_controll.php'; 
+?>
+<?php foreach ($employees as $employee) : ?>
     <tbody>
         <tr>
-            <th><?php echo eh($data["username"]); ?></th>
-            <td data-label="かな"><?php echo eh($data['kana']); ?></td>
-            <td data-label="性別">
-                <?php
-                if ($data["gender"] === 1) {
-                    echo "男";
-                } elseif ($data["gender"] === 2) {
-                    echo "女";
-                } else {
-                    echo "不明";
-                }
-                ?>
-            </td>
+            <th><?php echo eh($employee->username); ?></th>
+            <td data-label="かな"><?php echo eh($employee->kana); ?></td>
+
+            <td data-label="性別"><?php echo eh($employee->genderLabel()); ?></td>
+            
             <td data-label="年齢">
                 <?php
-                if (isset($data["birth_date"])) {
-                    $birthDate = str_replace("-", "", $data["birth_date"]);
-                    if (is_numeric($birthDate)) {
-                        $currentDate = date('Ymd');
-                        $age = floor((int)$currentDate - (int)$birthDate) / 10000;
-                        echo eh((int)$age);
-                    } else {
-                        echo "不明";
-                    }
-                } else {
-                    echo "不明";
-                }
+                $age = $employee->ageFromBirthday();
+                echo eh($age !== null ? (int)$age : "不明");
                 ?>
             </td>
-            <td data-label="生年月日"><?php echo isset($data["birth_date"]) ? eh($data['birth_date']) : "不明"; ?></td>
-            <td data-label=""><a class="edit-btn" href="edit_employee.php?id=<?php echo eh($data['id']); ?>">編集</a></td>
+            <td data-label="生年月日"><?php echo eh($employee->birth_date ?? "不明"); ?></td>
+            <td data-label=""><a class="edit-btn" href="edit_employee.php?id=<?php echo eh($employee->id); ?>">編集</a></td>
         </tr>
     </tbody>
 <?php endforeach; ?>

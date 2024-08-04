@@ -2,8 +2,8 @@
 
 <?php
 require_once 'header.php';
-require_once 'controll.php';
-require_once 'error_message.php';
+require_once __DIR__ . '/../controll/employee_controll.php';
+require_once __DIR__ . '/../controll/error_message.php';
 
 // トークンを生成し、セッションに保存
 if (empty($_SESSION['csrf_token'])) {
@@ -69,7 +69,7 @@ if (empty($_SESSION['csrf_token'])) {
                             </tr>
                         </thead>
                         <!-- 検索結果一覧テーブル -->
-                        <?php require_once 'process.php'; ?>
+                        <?php require_once __DIR__ . '/../search_result/process.php'; ?>
                     </table>
                 <?php endif; ?>
             </div>
@@ -78,7 +78,7 @@ if (empty($_SESSION['csrf_token'])) {
         <section>
             <!-- 検索結果が5件以上の場合パージネーション表示 -->
             <div class="pageNation">
-                <?php require_once 'page_nation.php'; ?>
+            <?php require_once __DIR__ . '/../common/page_nation.php'; ?>
             </div>
         </section>
     </div>
