@@ -26,7 +26,7 @@ require_once __DIR__ . '/../controll/branch_function.php';
 
         <section>
             <div class="list">
-                <?php if (empty($dataArray)) : ?>
+                <?php if (empty($branchList)) : ?>
                     <p class="error_search">該当する支店がありません</p>
                 <?php else : ?>
                     <table class="table">
@@ -47,7 +47,7 @@ require_once __DIR__ . '/../controll/branch_function.php';
 
         <section>
             <div class="pageNation">
-                <?php require_once __DIR__ . '/../standardize/page_nation.php'; ?>
+                <?php require_once __DIR__ . '/../common/page_nation.php'; ?>
             </div>
         </section>
     </div>

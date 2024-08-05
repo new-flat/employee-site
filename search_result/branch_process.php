@@ -1,23 +1,14 @@
 <?php 
 require_once __DIR__ . '/../controll/branch_controll.php'; 
 ?>
-<?php foreach ($dataArray as $data) : ?>
+<?php foreach ($branchList as $branch) : ?>
     <tbody>
         <tr>
-            <th><?php echo eh($data['branch_name']); ?></th>
-            <td data-label="電話番号"><?php echo eh($data['tel']); ?></td>
-            <td data-label="住所">
-                <?php
-                $prefectureName = $prefectures[$data['prefecture']];
-                $residence = $prefectureName . $data['city'] . $data['address'];
-                if (!empty($data['building'])) {
-                    $residence .= $data['building'];
-                }
-                echo eh($residence);
-                ?>
-            </td>
+            <th><?php echo eh($branch->branch_name); ?></th>
+            <td data-label="電話番号"><?php echo eh($branch->tel); ?></td>
+            <td data-label="住所"><?php echo eh($branch->getFullAddress()); ?></td>
             <td data-label="">
-                <a class="edit-btn" href="edit_branch.php?id=<?php echo $data['id']; ?>">編集</a>
+                <a class="edit-btn" href="edit_branch.php?id=<?php echo $branch->id; ?>">編集</a>
             </td>
         </tr>
     </tbody>
