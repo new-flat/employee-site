@@ -13,7 +13,7 @@ if (empty($_SESSION['csrf_token'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>社員管理システム</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href='/php_lesson/css/style.css'>
 </head>
 
 <body>
@@ -21,6 +21,9 @@ if (empty($_SESSION['csrf_token'])) {
         <ul class="menu">
             <li class="menu_item"><a href="employee_list.php" class="menu_btn">社員一覧</a></li>
             <li class="menu_item"><a href="insert_employee.php" class="menu_btn">社員登録</a></li>
+            <li class="menu_item"><a href="total_view.php" class="menu_btn">社員集計</a></li>
+            <li class="menu_item"><a href="branch_list.php" class="menu_btn">支店一覧</a></li>
+            <li class="menu_item"><a href="insert_branch.php" class="menu_btn">支店登録</a></li>
         </ul>
     </div>
 </body>
