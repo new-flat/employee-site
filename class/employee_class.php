@@ -91,6 +91,24 @@ class Employee
                 return "";
         }
     }
+
+    // 都道府県コードから地名を表示
+    public function getAddress()
+    {
+        $branches = array(
+            1 => "札幌支店", 2 => "仙台支店", 3 => "さいたま支店", 4 => "東京支店", 5 => "千葉支店", 6 => "横浜支店", 7 => "名古屋支店",
+            8 => "京都支店", 9 => "大阪本社", 10 => "神戸支店", 11 => "高松支店", 12 => "京都支店", 13 => "広島支店", 14 => "福岡支店",
+            15 => "那覇支店"
+        );
+
+
+        // 空の支店キーをチェック
+        if (empty($this->branch) || !isset($branches[$this->branch])) {
+            return ''; // 空欄を返す
+        }
+
+        return $branches[$this->branch];
+    }
 }
 
 ?>

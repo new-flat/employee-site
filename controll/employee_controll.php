@@ -3,7 +3,6 @@
 require_once 'xss.php';
 require_once __DIR__ . '/../class/employee_class.php';
 
-
 // DB接続
 try {
     $pdo = new PDO('mysql:host=localhost;dbname=php-test', 'root', 'root', [
@@ -97,5 +96,35 @@ if ($page == 1 || $page == $totalPages) {
 
 // DBの接続を閉じる
 $pdo = null;
+
+// 社員編集
+$errors = array();
+$user = null;
+if (isset($_GET["id"])) {
+    try {
+        $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root");
+        $edit_sql = "SELECT * FROM `php-test` WHERE id = :id";
+        $edit_stmt = $pdo->prepare($edit_sql);
+        $edit_stmt->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
+        $edit_stmt->execute();
+        $user = $edit_stmt->fetch(PDO::FETCH_OBJ); // 1件のデータを取得
+
+        if ($user->email === "0") {
+            $user->email = null;
+        }
+
+        if (!$user) {
+            $errors['id'] = "URLが間違っています";
+        }
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+} else {
+    $errors['id'] = "URLが間違っています";
+}
+
+if (isset($_GET['errors'])) {
+    $errors = json_decode($_GET['errors'], true);
+}
 
 ?>

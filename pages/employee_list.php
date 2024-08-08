@@ -1,6 +1,8 @@
 <?php
 require_once 'header.php';
 require_once __DIR__ . '/../controll/employee_controll.php';
+require_once __DIR__ . '/../controll/branch_function.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -33,12 +35,13 @@ require_once __DIR__ . '/../controll/employee_controll.php';
                     </div>
                     <div class="search-option">
                         <p>部署で探す</p>
-                        <select name="department">
-                            <option value="" disabled selected>部署を選択してください</option>
-                            <option value="">全て</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option> 
+                        <select name="branch">
+                            <option disabled selected>部署を選択してください</option>
+                            <?php
+                            foreach ($branches as $branchId => $branchName) {
+                                echo '<option value="' . eh($branchName) . '">' . eh($branchName) . '</option>';
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>                    
@@ -55,6 +58,7 @@ require_once __DIR__ . '/../controll/employee_controll.php';
                             <tr>
                                 <th class="table-title">氏名</th>
                                 <th class="table-title">かな</th>
+                                <th class="table-title">支店</th>
                                 <th class="table-title">性別</th>
                                 <th class="table-title">年齢</th>
                                 <th class="table-title">生年月日</th>
