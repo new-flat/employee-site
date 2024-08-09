@@ -1,8 +1,11 @@
 <?php
-require_once("header.php"); // セッション開始とCSRFトークン生成
-require_once("employee_controll.php");
-require_once("error_message.php");
 
+require_once 'header.php'; // セッション開始とCSRFトークン生成
+require_once __DIR__ . '/../controll/employee_controll.php';
+require_once __DIR__ . '/../controll/error_message.php';
+require_once __DIR__ . '/../controll/branch_function.php';
+
+// 社員編集
 $errors = array();
 $user = null;
 if (isset($_GET["id"])) {
@@ -25,13 +28,13 @@ if (isset($_GET["id"])) {
         echo $e->getMessage();
     }
 } else {
-    $errors['id'] = $error_message5;
+    $errors['id'] = "URLが間違っています";
 }
 
-// ↓これは何？
 if (isset($_GET['errors'])) {
     $errors = json_decode($_GET['errors'], true);
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +44,7 @@ if (isset($_GET['errors'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>社員編集</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href='/php_lesson/css/style.css'>
 </head>
 
 <body>
@@ -56,7 +59,7 @@ if (isset($_GET['errors'])) {
         <?php if (isset($errors['id'])) : ?>
             <p style="margin:0"><?php echo eh($errors['id']); ?></p>
         <?php else : ?>
-            <form action="edit_send2.php" method="POST" class="edit-class">
+            <form action="/php_lesson/controll/editE_controll.php" method="POST" class="edit-class">
                 <input type="hidden" name="csrf_token" value="<?php echo eh($_SESSION['csrf_token']); ?>">
                 <input type="hidden" name="id" value="<?php echo eh($_GET['id']); ?>">
                 <div>
@@ -81,12 +84,19 @@ if (isset($_GET['errors'])) {
                 </div>
                 <div>
                     <div class="label">
-                        <label class="insertBranch">部門</label> 
+                        <label class="insertLabel">部門</label> 
                     </div>
                     <select name="editBranch">
                         <option value="">支店を選択</option>
-                        
+                        <?php foreach ($branches as $key => $branch) : ?>
+                            <option value="<?php echo eh($key); ?>" <?php echo $user->branch == $key ? 'selected' : ''; ?>>
+                                <?php echo eh($branch); ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
+                    <?php if (!empty($errors['messages']['editBranch'])) : ?>
+                        <p class="error"><?php echo eh($errors['messages']['editBranch']); ?></p>
+                    <?php endif; ?>
                 </div>
                 <div>
                     <div class="label">
@@ -172,6 +182,16 @@ if (isset($_GET['errors'])) {
                 <!-- 保存ボタン -->
                 <input class="edit-submit" type="submit" value="保存" name="edit">
             </form>
+            <form action="/php_lesson/controll/delete.php" method="POST" class="edit-class" onsubmit="return confirmDelete();">
+                <input type="hidden" name="delete" value="<?php echo eh($_GET['id']); ?>">
+                <button type="submit" class="edit-btn">削除</button>
+            </form>
+
+            <script>
+            function confirmDelete() {
+                return confirm("本当に削除しますか？");
+            }
+            </script>
         <?php endif; ?>
     </div>
 </body>

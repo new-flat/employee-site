@@ -14,7 +14,8 @@ try {
 
 // パラメータの取得
 $name = $_GET['name'] ?? '';
-$gender = $_GET['gender'] ?? 'null';
+$gender = $_GET['gender'] ?? 'n';
+$branch = $_GET['branch'] ?? '';
 $page = (int) ($_GET['page'] ?? 1);
 
 // 1ページあたりのアイテム数
@@ -24,29 +25,34 @@ $limit = 5;
 $offset = ($page - 1) * $limit;
 
 // SQLクエリの作成
-$sql = 'SELECT * FROM `php-test` WHERE 1';
+$sql = 'SELECT * FROM `php-test` WHERE is_deleted = 0';
 // カウントクエリの作成
-$countSql = 'SELECT COUNT(*) FROM `php-test` WHERE 1';
+$countSql = 'SELECT COUNT(*) FROM `php-test` WHERE is_deleted = 0';
 $params = [];
 
 // 検索出力条件
 if (!empty($name)) {
-    $sql .= ' AND (`username` LIKE :name OR `kana` LIKE :kana)';
-    $countSql .= ' AND (`username` LIKE :name OR `kana` LIKE :kana)';
+    $sql .= ' AND (username LIKE :name OR kana LIKE :kana)';
+    $countSql .= ' AND (username LIKE :name OR kana LIKE :kana)';
     $params[':name'] = $params[':kana'] = '%' . $name . '%';
 }
 
 if (isset($_GET['search'])) {
     if ($gender === 'null') {
-        $sql .= ' AND `gender` IS NULL';
-        $countSql .= ' AND `gender` IS NULL';
+        $sql .= ' AND gender IS NULL';
+        $countSql .= ' AND gender IS NULL';
     } elseif ($gender !== '') {
-        $sql .= ' AND `gender` = :gender';
-        $countSql .= ' AND `gender` = :gender';
+        $sql .= ' AND gender = :gender';
+        $countSql .= ' AND gender = :gender';
         $params[':gender'] = (int) $gender;
     }
 }
 
+if (!empty($branch)) {
+    $sql .= " AND branch = :branch";
+    $countSql .= ' AND branch = :branch';
+    $params[':branch'] = (int) $branch;
+}
 // クエリ実行
 try {
     // PDOを使用してカウントクエリ実行、該当レコードの総数を取得
@@ -59,11 +65,12 @@ try {
     $sql .= ' LIMIT :limit OFFSET :offset';
     $stmt = $pdo->prepare($sql);
     foreach ($params as $key => $value) {
-        $stmt->bindValue($key, $value);
+        $stmt->bindValue($key, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
     }
     $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
+
     $dataArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Employeeクラスのインスタンスを作成
@@ -73,7 +80,7 @@ try {
     }
 } catch (PDOException $e) {
     error_log($e->getMessage());
-    echo 'データベースエラーが発生しました。もう一度お試しください。';
+    echo $e->getMessage();
     exit;
 }
 
