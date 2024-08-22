@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../controll/xss.php';
+require_once __DIR__ . '/../controll/branch_function.php';
+
 session_start();
 
 if (empty($_SESSION['csrf_token'])) {
@@ -24,7 +27,13 @@ if (empty($_SESSION['csrf_token'])) {
             <li class="menu_item"><a href="total_view.php" class="menu_btn">社員集計</a></li>
             <li class="menu_item"><a href="branch_list.php" class="menu_btn">支店一覧</a></li>
             <li class="menu_item"><a href="insert_branch.php" class="menu_btn">支店登録</a></li>
+            <li class="menu_item"><a href="quali_masta.php" class="menu_btn">資格マスタ</a></li>
         </ul>
+        <?php if (isset($_SESSION['username'])): ?>
+        <div class="user-info">
+            <p><?php echo eh($_SESSION['username']); ?>さんログイン中</p>
+        </div>
+        <?php endif; ?>
     </div>
 </body>
 
