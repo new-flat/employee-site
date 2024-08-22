@@ -1,8 +1,11 @@
 <?php
+
 require_once 'header.php'; // セッション開始とCSRFトークン生成
 require_once __DIR__ . '/../controll/branch_controll.php';
 require_once __DIR__ . '/../controll/branch_function.php';
 require_once __DIR__ . '/../controll/error_message.php';
+require_once __DIR__ . '/../controll/branch_function.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -27,9 +30,9 @@ require_once __DIR__ . '/../controll/error_message.php';
         <?php if (isset($errors['id'])) : ?>
             <p style="margin:0"><?php echo eh($errors['id']); ?></p>
         <?php else : ?>
-            <form action="edit_send3.php" method="POST" class="edit-class">
+            <form action="/php_lesson/controll/editB_controll.php" method="POST" class="edit-class">
                 <input type="hidden" name="csrf_token" value="<?php echo eh($_SESSION['csrf_token']); ?>">
-                <input type="hidden" name="originalId" value="<?php echo eh($user->id); ?>">
+                <input type="hidden" name="originalId" value="<?php echo $data[id]; ?>">
                 
                 <div>
                     <div class="label">
@@ -103,7 +106,7 @@ require_once __DIR__ . '/../controll/error_message.php';
                 </div>
 
                 <!-- 保存ボタン -->
-                <input class="edit-submit" type="submit" value="保存" name="edit">
+                <input class="edit-submit" type="submit"  name="edit">
             </form>
         <?php endif; ?>
     </div>

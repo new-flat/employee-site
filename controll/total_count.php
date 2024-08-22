@@ -17,7 +17,7 @@ $gender_count_sql = "SELECT
                         COUNT(CASE WHEN gender = 2 THEN 1 END) AS woman,
                         COUNT(CASE WHEN gender IS NULL THEN 1 END) AS unknown,
                         COUNT(*) AS total_gender
-                    FROM `php-test`";
+                    FROM `employee`";
 $countE_result = $pdo->query($gender_count_sql);
 $countE_row = $countE_result->fetch(PDO::FETCH_ASSOC);
 
@@ -27,7 +27,7 @@ $unknown = $countE_row['unknown'];
 $total_gender = $countE_row['total_gender'];
 
 // 部門別の人数を取得
-$branch_count_sql = "SELECT branch, COUNT(*) AS employee_each_branch FROM `php-test` GROUP BY branch";
+$branch_count_sql = "SELECT branch, COUNT(*) AS employee_each_branch FROM `employee` GROUP BY branch";
 $countB_result = $pdo->query($branch_count_sql);
 
 // 結果を格納

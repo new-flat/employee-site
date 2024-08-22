@@ -2,6 +2,7 @@
 require_once 'header.php';
 require_once __DIR__ . '/../controll/employee_controll.php';
 require_once __DIR__ . '/../controll/branch_function.php';
+require_once __DIR__ . '/../controll/branch_function.php';
 
 ?>
 
@@ -37,11 +38,12 @@ require_once __DIR__ . '/../controll/branch_function.php';
                         <p>部署で探す</p>
                         <select name="branch">
                             <option disabled selected>部署を選択してください</option>
-                            <?php
-                            foreach ($branches as $branchId => $branchName) {
-                                echo '<option value="' . eh($branchName) . '">' . eh($branchName) . '</option>';
-                            }
-                            ?>
+                            <option value="" <?php echo eh($branches === '') ? 'selected' : ''; ?>>全て</option>
+                            <?php foreach ($branches as $branch_id => $branchName) : ?>
+                                <option value="<?php echo eh($branch_id); ?>" <?php echo eh($branch == $branch_id) ? 'selected' : ''; ?>>
+                                    <?php echo eh($branchName); ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                 </div>                    

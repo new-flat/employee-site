@@ -2,6 +2,7 @@
 require_once 'header.php'; // セッション開始とCSRFトークン生成
 require_once __DIR__ . '/../controll/xss.php';
 require_once __DIR__ . '/../controll/quali_controll.php';
+require_once __DIR__ . '/../controll/branch_function.php';
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +10,7 @@ require_once __DIR__ . '/../controll/quali_controll.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href='/php_lesson/css/style.css'>
     <title>Document</title>
 </head>
 <body>
@@ -23,7 +24,7 @@ require_once __DIR__ . '/../controll/quali_controll.php';
         <?php endif ?>
         
         <form action="/php_lesson/controll/quali_controll.php" method="post" class="edit_class">
-            <table class="count_table" style="padding-top: 50px;">
+            <table class="quali_table">
                 <thead>
                     <tr>
                         <th class="table-title">ID</th>
@@ -32,7 +33,7 @@ require_once __DIR__ . '/../controll/quali_controll.php';
                 </thead>
                 <tbody>
                     <?php foreach ($qualificationList as $quali) : ?>
-   1                     <tr>
+                        <tr>
                             <td><?php echo eh($quali['id']); ?></td>
                             <td data-label="資格名">
                                 <!-- qualification[]の配列形式でそれぞれのIdに対応する資格名を送信 -->

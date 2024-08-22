@@ -2,7 +2,10 @@
 
 <?php
 require_once 'header.php';
-require_once 'employee_controll.php';
+require_once __DIR__ . '/../controll/employee_controll.php';
+require_once __DIR__ . '/../controll/branch_function.php';
+require_once __DIR__ . '/../controll/quali_controll.php';
+require_once __DIR__ . '/../controll/branch_function.php';
 ?>
 
 <!DOCTYPE html>
@@ -12,22 +15,28 @@ require_once 'employee_controll.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>社員登録</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href='/php_lesson/css/style.css'>
 </head>
 
 <body>
+    <div id="menu-title" class="wrapper">
+        <div class="title-name">
+            <a class="menu_btn" href="#">社員登録</a>
+        </div>
+    </div>
     <div id="main" class="wrapper">
         <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
             <p style="margin:0"><?php echo eh("登録しました"); ?></p>
         <?php endif; ?>
-        <form action="insert_send.php" method="POST" class="insert-class">
+
+        <form action="/php_lesson/controll/insertE_controll.php" method='POST' class="insert-class">
             <input type="hidden" name="csrf_token" value="<?php echo eh($_SESSION['csrf_token']); ?>">
             <div>
                 <div class="label">
                     <label class="insertLabel">氏名</label>
                     <p class="insertMust">必須</p>
                 </div>
-                <input type="text" name="insertName" value="<?php echo eh($_POST['insertName'] ?? ''); ?>">
+                <input type="text" name="insertName" required value="<?php echo eh($_POST['insertName'] ?? ''); ?>">
                 <?php if (!empty($errors['insertName'])): ?>
                     <p><?php echo eh($errors['insertName']); ?></p>
                 <?php endif; ?>
@@ -37,10 +46,24 @@ require_once 'employee_controll.php';
                     <label class="insertLabel">かな</label>
                     <p class="insertMust">必須</p>
                 </div>
-                <input type="text" name="insertKana" value="<?php echo eh($_POST['insertKana'] ?? ''); ?>">
+                <input type="text" name="insertKana" required value="<?php echo eh($_POST['insertKana'] ?? ''); ?>">
                 <?php if (!empty($errors['insertKana'])): ?>
                     <p class="error"><?php echo eh($errors['insertKana']); ?></p>
                 <?php endif; ?>
+            </div>
+            <div>
+                <div class="label">
+                    <label class="insertLabel">部門</label> 
+                </div>
+                <select name="insertBranch">
+                    <option value="">支店を選択</option>
+                    <?php foreach ($branches as $key => $branch): ?>
+                        <option value="<?php echo eh($key); ?>" <?php echo (isset($_POST['insertBranch']) && $_POST['insertBranch'] === $key) ? 'selected' : ''; ?>><?php echo eh($branch); ?></option>
+                    <?php endforeach; ?>
+                    <?php if (!empty($errors['insertBranch'])): ?>
+                        <p><?php echo eh($errors['insertBranch']); ?></p>
+                    <?php endif; ?>
+                </select>
             </div>
             <div>
                 <div class="label">
@@ -79,6 +102,16 @@ require_once 'employee_controll.php';
             </div>
             <div>
                 <div class="label">
+                    <label class="insertOption">パスワード</label>
+                    <p class="insertMust">必須</p>
+                </div>
+                <input type="password" name="insertPass" required value="<?php echo eh($errors['data']['insertPass'] ?? ''); ?>">
+                <?php if (!empty($errors['insertPass'])): ?>
+                    <p class="error"><?php echo eh($errors['insertPass']); ?></p>
+                <?php endif; ?>
+            </div>
+            <div>
+                <div class="label">
                     <label class="insertOption">通勤時間(分)</label>
                 </div>
                 <input type="type" name="insertCommute" value="<?php echo eh($errors['data']['insertCommute'] ?? ''); ?>">
@@ -109,9 +142,25 @@ require_once 'employee_controll.php';
                     <label><input type="radio" name="insertMarried" value="1" <?php echo (isset($_POST['insertMarried'])) ? 'checked' : 'null'; ?>>既婚</label>
                 </div>
             </div>
+            <div>
+                <div class="label">
+                    <label class="insertOption">保有資格</label>
+                </div>
+                <div>
+
+                    <?php foreach ($qualificationList as $qualiId => $quali) : ?>
+                        <input type="checkbox" name="insertQuali[]" value="<?php echo eh($qualiId); ?>" 
+                            <?php echo (isset($_POST['insertQuali']) && $_POST['insertQuali'] === $qualiId) ? 'selected' : ''; ?>>
+                        <label for=""><?php echo eh($quali["quali_name"]); ?></label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
 
             <!-- 登録ボタン -->
             <input class="insert-btn" type="submit" value="登録" name="insert">
+
+            <p>すでに登録済みの方は<a href="login_form.php">こちら</a></p>
+
         </form>
     </div>
 </body>

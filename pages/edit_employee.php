@@ -4,6 +4,9 @@ require_once 'header.php'; // セッション開始とCSRFトークン生成
 require_once __DIR__ . '/../controll/employee_controll.php';
 require_once __DIR__ . '/../controll/error_message.php';
 require_once __DIR__ . '/../controll/branch_function.php';
+require_once __DIR__ . '/../controll/editE_controll.php';
+require_once __DIR__ . '/../controll/quali_controll.php';
+require_once __DIR__ . '/../controll/branch_function.php';
 
 // 社員編集
 $errors = array();
@@ -11,11 +14,13 @@ $user = null;
 if (isset($_GET["id"])) {
     try {
         $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root");
-        $edit_sql = "SELECT * FROM `php-test` WHERE id = :id";
+        $edit_sql = "SELECT * FROM `employee` WHERE id = :id";
         $edit_stmt = $pdo->prepare($edit_sql);
         $edit_stmt->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
         $edit_stmt->execute();
         $user = $edit_stmt->fetch(PDO::FETCH_OBJ); // 1件のデータを取得
+
+        $employeeId = $user->id; // ここで社員IDを取得
 
         if ($user->email === "0") {
             $user->email = null;
@@ -34,6 +39,16 @@ if (isset($_GET["id"])) {
 if (isset($_GET['errors'])) {
     $errors = json_decode($_GET['errors'], true);
 }
+
+// 保有資格クエリ作成
+$qualiIdSql = "SELECT quali_id FROM emp_quali WHERE employee_id = :employee_id";
+$stmt = $pdo->prepare($qualiIdSql);
+$stmt->bindValue(':employee_id', $_GET["id"], PDO::PARAM_INT);
+$stmt->execute();
+
+// 資格IDを配列に格納
+$quali_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
 
 ?>
 
@@ -62,6 +77,7 @@ if (isset($_GET['errors'])) {
             <form action="/php_lesson/controll/editE_controll.php" method="POST" class="edit-class">
                 <input type="hidden" name="csrf_token" value="<?php echo eh($_SESSION['csrf_token']); ?>">
                 <input type="hidden" name="id" value="<?php echo eh($_GET['id']); ?>">
+                <input type="hidden" name="employee_id" value="<?php echo htmlspecialchars($employeeId); ?>">
                 <div>
                     <div class="label">
                         <label class="insertLabel">氏名</label>
@@ -140,6 +156,16 @@ if (isset($_GET['errors'])) {
                 </div>
                 <div>
                     <div class="label">
+                        <label class="insertOption">パスワード</label>
+                        <p>変更する場合のみ入力</p>
+                    </div>
+                    <input type="password" name="editPass" value="">
+                    <?php if (!empty($errors['editPass'])) : ?>
+                        <p class="error"><?php echo eh($errors['editPass']); ?></p>
+                    <?php endif; ?>    
+                </div>
+                <div>
+                    <div class="label">
                         <label class="insertOption">通勤時間(分)</label>
                     </div>
                     <input type="text" name="editCommute" value="<?php echo eh($errors['data']['editCommute'] ?? $user->commute_time ?? ''); ?>">
@@ -179,10 +205,29 @@ if (isset($_GET['errors'])) {
                         } ?>>既婚</label>
                     </div>
                 </div>
+                <div>
+                    <div class="label">
+                        <label class="insertOption">保有資格</label>
+                    </div>
+                    <div>
+                        <?php foreach ($qualificationList as $qualification) 
+                        {
+                           echo '<input type="checkbox" name="editQuali[]" value="'.$qualification['id'].'"';
+                           if (in_array($qualification['id'], $quali_ids)) 
+                           {
+                                echo ' checked';
+                           }
+                           echo'>' . $qualification['quali_name'] . ' ';
+                        }
+                        ?>
+                    </div>
+                </div>
                 <!-- 保存ボタン -->
                 <input class="edit-submit" type="submit" value="保存" name="edit">
+
             </form>
             <form action="/php_lesson/controll/delete.php" method="POST" class="edit-class" onsubmit="return confirmDelete();">
+                <input type="hidden" name="csrf_token" value="<?php echo eh($_SESSION['csrf_token']); ?>">
                 <input type="hidden" name="delete" value="<?php echo eh($_GET['id']); ?>">
                 <button type="submit" class="edit-btn">削除</button>
             </form>

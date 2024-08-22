@@ -3,6 +3,7 @@ require_once 'header.php'; // セッション開始とCSRFトークン生成
 require_once __DIR__ . '/../controll/branch_controll.php';
 require_once __DIR__ . '/../controll/branch_function.php';
 require_once __DIR__ . '/../controll/error_message.php';
+require_once __DIR__ . '/../controll/branch_function.php';
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +25,7 @@ require_once __DIR__ . '/../controll/error_message.php';
             <p style="margin:0">登録しました</p>
         <?php endif; ?>
 
-        <form action="insert_branch2.php" method="POST" class="edit-class">
+        <form action="/php_lesson/controll/insertB_controll.php" method="POST" class="edit-class">
             <input type="hidden" name="csrf_token" value="<?php echo eh($_SESSION['csrf_token']); ?>">
             <div>
                 <div class="label">

@@ -1,6 +1,9 @@
 <?php
+require_once 'header.php';
 require_once __DIR__ . '/../controll/branch_controll.php';
 require_once __DIR__ . '/../controll/branch_function.php';
+require_once __DIR__ . '/../controll/not_login.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +16,6 @@ require_once __DIR__ . '/../controll/branch_function.php';
 </head>
 <body>
     <div id="main" class="wrapper">
-        <header><h1 class="title_branch">支店一覧</h1></header>
         <section>
             <form class="search-container" action="search_branch.php" method="get">
                 <div class="search-branch">
