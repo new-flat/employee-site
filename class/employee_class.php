@@ -12,6 +12,8 @@ class Employee
     public $commute_time;
     public $blood_type;
     public $married;
+    public $image;
+    public $intro_text;
 
     public function __construct(array $employee)
     {
@@ -25,6 +27,8 @@ class Employee
         $this->commute_time = $employee['commute_time'];
         $this->blood_type = $employee['blood_type'];
         $this->married = $employee['married'];
+        $this->married = $employee['image'];
+        $this->married = $employee['intro_text'];
     }
 
     // 生年月日から年齢を算出
@@ -54,7 +58,7 @@ class Employee
     public function genderLabel(): ?string 
     {
         if ($this->gender === null) {
-            return '不明';
+            return null;
         }
     
         if ($this->gender === 1) {
@@ -109,6 +113,7 @@ class Employee
 
         return $branches[$this->branch];
     }
+
 }
 
 ?>
