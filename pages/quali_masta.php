@@ -3,6 +3,8 @@ require_once 'header.php'; // セッション開始とCSRFトークン生成
 require_once __DIR__ . '/../controll/xss.php';
 require_once __DIR__ . '/../controll/quali_controll.php';
 require_once __DIR__ . '/../controll/branch_function.php';
+require_once __DIR__ . '/../controll/not_login.php';
+
 ?>
 
 <!DOCTYPE html>

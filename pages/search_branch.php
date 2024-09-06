@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../controll/branch_controll.php';
 require_once __DIR__ . '/../controll/branch_function.php';
+require_once 'header.php';
+require_once __DIR__ . '/../controll/not_login.php';
+
 
 // トークンを生成し、セッションに保存
 if (empty($_SESSION['csrf_token'])) {
@@ -24,7 +27,7 @@ if (empty($_SESSION['csrf_token'])) {
                     <a class="menu_btn" href="branch_list.php">支店一覧</a>
                 </div>
             </div>
-            <form class="search-container" action="branch_search.php" method="get">
+            <form class="search-container" action="search_branch.php" method="get">
                 <div class="search-branch">
                     <p>支店を検索</p>
                     <input type="text" name="branch_name" value="<?php echo eh($branchName); ?>">
@@ -48,7 +51,7 @@ if (empty($_SESSION['csrf_token'])) {
                             </tr>
                         </thead>
                         <!-- 検索結果一覧テーブル -->
-                        <?php require_once __DIR__ . '/../search_result/branch_process.php'; ?>
+                        <?php require_once __DIR__ . '/../pages/pages/branch_process.php'; ?>
                     </table>
                 <?php endif; ?>
             </div>
@@ -57,7 +60,7 @@ if (empty($_SESSION['csrf_token'])) {
         <section>
             <!-- 検索結果が5件以上の場合パージネーション表示 -->
             <div class="pageNation">
-            <?php require_once __DIR__ . '/../standardize/page_nation.php'; ?>
+            <?php require_once __DIR__ . '/../common/page_nation.php'; ?>
             </div>
         </section>
     </div>

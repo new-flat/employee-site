@@ -4,7 +4,10 @@ require_once 'header.php'; // セッション開始とCSRFトークン生成
 require_once __DIR__ . '/../controll/branch_controll.php';
 require_once __DIR__ . '/../controll/branch_function.php';
 require_once __DIR__ . '/../controll/error_message.php';
-require_once __DIR__ . '/../controll/branch_function.php';
+require_once __DIR__ . '/../controll/not_login.php';
+require_once __DIR__ . '/../class/branch_class.php';
+
+
 
 ?>
 
@@ -32,14 +35,14 @@ require_once __DIR__ . '/../controll/branch_function.php';
         <?php else : ?>
             <form action="/php_lesson/controll/editB_controll.php" method="POST" class="edit-class">
                 <input type="hidden" name="csrf_token" value="<?php echo eh($_SESSION['csrf_token']); ?>">
-                <input type="hidden" name="originalId" value="<?php echo $data[id]; ?>">
+                <input type="hidden" name="originalId" value="<?php echo eh($branch->id) ?>">
                 
                 <div>
                     <div class="label">
                         <label class="insertLabel">支店名</label>
                         <p class="insertMust">必須</p>
                     </div>
-                    <input type="text" name="editBranch" value="<?php echo eh($errors['data']['editBranch'] ?? $user->branch_name ?? ''); ?>">
+                    <input type="text" name="editBranch" value="<?php echo eh($errors['data']['editBranch'] ?? $branch->branch_name ?? ''); ?>">
                     <?php if (!empty($errors['messages']['editBranch'])) : ?>
                         <p><?php echo eh($errors['messages']['editBranch']); ?></p>
                     <?php endif; ?>
@@ -53,9 +56,9 @@ require_once __DIR__ . '/../controll/branch_function.php';
                     <div>
                         <select name="editPrefecture">
                             <option value="">都道府県を選択</option>
-                            <?php foreach ($prefectures as $key => $prefecture) : ?>
-                                <option value="<?php echo eh($key); ?>" <?php echo $user->prefecture == $key ? 'selected' : ''; ?>>
-                                    <?php echo eh($prefecture); ?>
+                            <?php foreach ($branchSelect as $key => $pref) : ?>
+                                <option value="<?php echo eh($key); ?>" <?php echo ($branch->prefecture === $key) ? 'selected' : ''; ?>>
+                                    <?php echo eh($pref); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -64,19 +67,19 @@ require_once __DIR__ . '/../controll/branch_function.php';
                         <?php endif; ?>
                     </div>
                     <div>
-                        <input type="text" name="editCity" value="<?php echo eh($errors['data']['editCity'] ?? $user->city ?? ''); ?>">
+                        <input type="text" name="editCity" value="<?php echo eh($errors['data']['editCity'] ?? $branch->city ?? ''); ?>">
                         <?php if (!empty($errors['messages']['editCity'])) : ?>
                             <p class="error"><?php echo eh($errors['messages']['editCity']); ?></p>
                         <?php endif; ?>
                     </div>
                     <div>
-                        <input type="text" name="editAddress" value="<?php echo eh($errors['data']['editAddress'] ?? $user->address ?? ''); ?>">
+                        <input type="text" name="editAddress" value="<?php echo eh($errors['data']['editAddress'] ?? $branch->address ?? ''); ?>">
                         <?php if (!empty($errors['messages']['editAddress'])) : ?>
                             <p class="error"><?php echo eh($errors['messages']['editAddress']); ?></p>
                         <?php endif; ?>
                     </div>
                     <div>
-                        <input type="text" name="editBuild" value="<?php echo eh($errors['data']['editBuild'] ?? $user->building ?? ''); ?>">
+                        <input type="text" name="editBuild" value="<?php echo eh($errors['data']['editBuild'] ?? $branch->building ?? ''); ?>">
                         <?php if (!empty($errors['messages']['editBuilding'])) : ?>
                             <p class="error"><?php echo eh($errors['messages']['editBuilding']); ?></p>
                         <?php endif; ?>
@@ -88,7 +91,7 @@ require_once __DIR__ . '/../controll/branch_function.php';
                         <label class="insertLabel">電話番号</label>
                         <p class="insertMust">必須</p>
                     </div>
-                    <input type="text" name="editTel" value="<?php echo eh($errors['data']['editTel'] ?? $user->tel ?? ''); ?>">
+                    <input type="text" name="editTel" value="<?php echo eh($errors['data']['editTel'] ?? $branch->tel ?? ''); ?>">
                     <?php if (!empty($errors['messages']['editTel'])) : ?>
                         <p class="error"><?php echo eh($errors['messages']['editTel']); ?></p>
                     <?php endif; ?>
@@ -99,7 +102,7 @@ require_once __DIR__ . '/../controll/branch_function.php';
                         <label class="insertLabel">並び順</label>
                         <p class="insertMust">必須</p>
                     </div>
-                    <input type="text" name="editId" value="<?php echo eh($errors['data']['editId'] ?? $user->id ?? ''); ?>">
+                    <input type="text" name="editId" value="<?php echo eh($errors['data']['editId'] ?? $branch->id ?? ''); ?>">
                     <?php if (!empty($errors['messages']['editId'])) : ?>
                         <p class="error"><?php echo eh($errors['messages']['editId']); ?></p>
                     <?php endif; ?>

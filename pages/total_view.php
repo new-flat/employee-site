@@ -1,6 +1,9 @@
 <?php
 require_once 'header.php';
 require_once __DIR__ . '/../controll/total_count.php';
+require_once __DIR__ . '/../controll/branch_function.php';
+
+
 ?>
 
 <!DOCTYPE html>

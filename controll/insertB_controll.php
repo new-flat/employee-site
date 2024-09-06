@@ -3,7 +3,7 @@
 require_once 'branch_function.php';
 require_once 'branch_controll.php';
 require_once 'error_message.php';
-require_once 'header.php'; // セッション開始とCSRFトークン生成
+require_once __DIR__ . '/../pages/header.php'; // セッション開始とCSRFトークン生成
 
 $errors = array();
 
@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 入力データをセッションに保存
     $_SESSION['form_data'] = $_POST;
-
     $insertBranch = $_POST['insertBranch'];
     $insertTel = $_POST['insertTel'];
     $insertPrefecture = $_POST['insertPrefecture'];
@@ -75,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->commit();
 
             // 同じページ（insert_branch.php）に戻り、URLを追加してメッセージを表示
-            header('Location: insert_branch.php?success=1');
+            header('Location:/php_lesson/pages/insert_branch.php?success=1');
             // リダイレクト後に不要なコードが実行されないようにする
             exit;
         } catch (PDOException $e) {
@@ -88,8 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $pdo = null;
+
     } else {
         // エラーがある場合はフォームに戻る
-        include 'insert_branch.php';
+        header('Location: /php_lesson/pages/insert_branch.php');
+        exit();
     }
 }

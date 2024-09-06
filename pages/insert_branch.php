@@ -4,6 +4,8 @@ require_once __DIR__ . '/../controll/branch_controll.php';
 require_once __DIR__ . '/../controll/branch_function.php';
 require_once __DIR__ . '/../controll/error_message.php';
 require_once __DIR__ . '/../controll/branch_function.php';
+require_once __DIR__ . '/../controll/not_login.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -46,8 +48,8 @@ require_once __DIR__ . '/../controll/branch_function.php';
                 <div>
                     <select id="prefecture" name="insertPrefecture">
                         <option value="">選択してください</option>
-                        <?php foreach ($prefectures as $key => $prefecture): ?>
-                            <option value="<?php echo eh($key); ?>" <?php echo (isset($_POST['insertPrefecture']) && $_POST['insertPrefecture'] === $key) ? 'selected' : ''; ?>><?php echo eh($prefecture); ?></option>
+                        <?php foreach ($prefSelect as $key => $pref): ?>
+                            <option value="<?php echo eh($key); ?>" <?php echo (isset($_POST['insertPrefecture']) && $_POST['insertPrefecture'] === $key) ? 'selected' : ''; ?>><?php echo eh($pref); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

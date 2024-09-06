@@ -1,5 +1,5 @@
 <?php 
-require_once __DIR__ . '/../controll/branch_controll.php'; 
+require_once __DIR__ . '/../controll/employee_controll.php'; 
 ?>
 
 <?php if ($totalResults > 4) : ?>

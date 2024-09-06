@@ -1,6 +1,6 @@
 <?php
 require_once 'error_message.php';
-require_once 'header.php';
+require_once __DIR__ . '/../pages/header.php'; // セッション開始とCSRFトークン生成
 
 $errors = array();
 
@@ -11,36 +11,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // トークンが一致するか確認
-    // ⏬なぜhash_equalsを使うのか？
-    // 通常の比較演算子(`==`や`===`)を使うと、文字列の長さや部分的な一致によって処理時間が変わることがあり、
-    // これを攻撃者が悪用して文字列を推測するリスクがあります。hash_equalsは文字列の全体を一度に比較し、
-    // 常に一定の時間をかけるため、タイミング攻撃を防止するのに適しています。
-    if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-        // トークンが一致しない場合
-        die('リクエストが無効です');
+    if (hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        // フォームの入力値を取得
+        $insertName = $_POST['insertName'];
+        $insertKana = $_POST['insertKana'];
+        $insertBranch = $_POST['insertBranch'];
+        $insertGender = $_POST['insertGender'];
+        $insertDate = $_POST['insertDate'] ?? null;
+        $insertEmail = $_POST['insertEmail'];
+        $insertCommute = isset($_POST['insertCommute']) ? trim($_POST['insertCommute']) : null;
+        $insertBlood = $_POST['insertBlood'];
+        $insertMarried = $_POST['insertMarried'] ?? null;
+        $insertPass = $_POST['insertPass'];
+    } else {
+        die("リクエストが無効です");
     }
 
-    $insertName = $_POST['insertName'];
-    $insertKana = $_POST['insertKana'];
-    $insertGender = $_POST['insertGender'];
-    $insertDate = $_POST['insertDate'];
-    $insertEmail = $_POST['insertEmail'];
-    $insertCommute = isset($_POST['insertCommute']) ? trim($_POST['insertCommute']) : null;
-    $insertBlood = $_POST['insertBlood'] ?? null;
-    $insertMarried = $_POST['insertMarried'] ?? null;
 
-    // 必須項目のチェック
-    if (empty($insertName)) {
+    // 入力項目のチェック
+    if (empty($_POST['insertName'])) {
         $errors['insertName'] = $error_message1;
     }
-    if (empty($insertKana)) {
+    if (empty($_POST['insertKana'])) {
         $errors['insertKana'] = $error_message2;
     }
-    if (empty($insertEmail)) {
+    if (empty($_POST['insertEmail'])) {
         $errors['insertEmail'] = $error_message6;
     }
-    if (empty($insertBlood)) {
+    if (empty($_POST['insertBlood'])) {
         $errors['insertBlood'] = $error_message7;
+    }
+    if (empty($_POST['insertPass'])) {
+        $errors['insertPass'] = $error_message3;
+    }
+    // パスワードの長さチェック(8文字以上)
+    if (strlen($insertPass) < 8) {
+        $errors['insertPass'] = $error_message13;
+    } else {
+        // パスワードをハッシュ化
+        $hashedPass = password_hash($insertPass, PASSWORD_DEFAULT);
     }
 
     // 通勤時間のバリデーション（1以上の整数かどうか）
@@ -50,9 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // 入力内容をデータベースに登録
+    // メールアドレスの重複チェック
     if (empty($errors)) {
-        // DB接続
         try {
             $pdo = new PDO(
                 'mysql:host=localhost;dbname=php-test',
@@ -61,43 +69,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
             );
 
-            // トランザクション内のすべての操作が成功した場合のみデータベースに反映。一つでも失敗した場合はすべての操作を取り消し
-            $pdo->beginTransaction();
-
-            $sql = "INSERT INTO `php-test` 
-                    (`username`, `kana`, `gender`, `birth_date`, `email`, `commute_time`, `blood_type`, `married`) 
-                    VALUES (:username, :kana, :gender, :birth_date, :email, :commute_time, :blood_type, :married)";
+            $sql = "SELECT * FROM employee WHERE email = :email";
             $stmt = $pdo->prepare($sql);
-            $stmt->bindValue(':username', $insertName, PDO::PARAM_STR);
-            $stmt->bindValue(':kana', $insertKana, PDO::PARAM_STR);
-            $stmt->bindValue(':gender', $insertGender, PDO::PARAM_INT);
-            $stmt->bindValue(':birth_date', $insertDate, PDO::PARAM_STR);
             $stmt->bindValue(':email', $insertEmail, PDO::PARAM_STR);
-            $stmt->bindValue(':commute_time', $insertCommute, PDO::PARAM_INT);
-            $stmt->bindValue(':blood_type', $insertBlood, PDO::PARAM_INT);
-            $stmt->bindValue(':married', $insertMarried, PDO::PARAM_INT);
-
             $stmt->execute();
-            // 'commit'メソッドを使用して、トランザクション内のすべての操作を確定
-            $pdo->commit();
+            $count = $stmt->fetch();
 
-            // 同じページ（insert_employee.php）に戻り、URLを追加してメッセージを表示
-            header('Location: insert_employee.php?success=1');
-            // リダイレクト後に不要なコードが実行されないようにする
-            exit;
-        } catch (PDOException $e) {
-            // トランザクション内でエラーが発生した場合、操作を取り消し
-            if ($pdo->inTransaction()) {
-                $pdo->rollBack();
+            if ($count === $insertEmail) {
+                // 他の社員に登録されているメールアドレスと同じメールアドレスが入力された場合
+                $errors['insertEmail'] = 'このメールアドレスは既に登録されています';
+            } else {
+                // トランザクション内のすべての操作が成功した場合のみデータベースに反映
+                $pdo->beginTransaction();
+
+                $sql = "INSERT INTO `employee` 
+                        (`username`, `kana`, `branch`, `gender`, `birth_date`, `email`,`password`, `commute_time`, `blood_type`, `married`) 
+                        VALUES 
+                        (:username, :kana, :branch, :gender, :birth_date, :email, :password, :commute_time, :blood_type, :married)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindValue(':username', $insertName, PDO::PARAM_STR);
+                $stmt->bindValue(':kana', $insertKana, PDO::PARAM_STR);
+                $stmt->bindValue(':branch', $insertBranch, PDO::PARAM_INT);
+                $stmt->bindValue(':gender', $insertGender, PDO::PARAM_INT);
+                $stmt->bindValue(':birth_date', $insertDate, PDO::PARAM_STR);
+                $stmt->bindValue(':email', $insertEmail, PDO::PARAM_STR);
+                $stmt->bindValue(':password', $hashedPass, PDO::PARAM_STR);
+                $stmt->bindValue(':commute_time', $insertCommute, PDO::PARAM_INT);
+                $stmt->bindValue(':blood_type', $insertBlood, PDO::PARAM_STR);
+                $stmt->bindValue(':married', $insertMarried, PDO::PARAM_INT);
+
+                $stmt->execute();
+
+                // 保有資格の登録
+                if (!empty($insertQuali)) {
+                    $employeeId = $pdo->lastInsertId();
+                    $sql = "INSERT INTO `emp_quali` (`employee_id`, `quali_id`) VALUES (:employee_id, :quali_id)";
+                    $stmt = $pdo->prepare($sql);
+                    foreach ($insertQuali as $qualiId) {
+                        $stmt->bindValue(':employee_id', $employeeId, PDO::PARAM_INT);
+                        $stmt->bindValue(':quali_id', $qualiId, PDO::PARAM_INT);
+                        $stmt->execute();
+                    }
+                }
+
+                // トランザクションをコミット
+                $pdo->commit();
+
+                // 登録成功後のリダイレクト
+                header('Location: /php_lesson/pages/insert_employee.php?success=1');
+                exit();
             }
-            // エラーメッセージをログに記録
-            error_log($e->getMessage());
+        } catch (PDOException $e) {
+            // エラー発生時の処理
+            $pdo->rollBack();
+            echo $e->getMessage();
         }
-
-        $pdo = null;
     } else {
-        // エラーがある場合はフォームに戻る
-        include 'insert_employee.php';
+        // エラーがある場合、フォームにエラーメッセージを表示
+        $_SESSION['errors'] = $errors;
+        header('Location: /php_lesson/pages/insert_employee.php');
+        exit();
     }
 }
 ?>

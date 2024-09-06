@@ -4,6 +4,8 @@
 require_once 'header.php';
 require_once __DIR__ . '/../controll/employee_controll.php';
 require_once __DIR__ . '/../controll/error_message.php';
+require_once __DIR__ . '/../controll/branch_function.php';
+require_once __DIR__ . '/../controll/not_login.php';
 
 // トークンを生成し、セッションに保存
 if (empty($_SESSION['csrf_token'])) {
@@ -22,7 +24,7 @@ if (empty($_SESSION['csrf_token'])) {
 <body>
     <div id="main" class="wrapper">
         <section>
-            <form class="search-container" action="employee_search.php" method="get">
+            <form class="search-container" action="search_employee.php" method="get">
                 <div class="search-box">
                     <input type="text" name="name" placeholder="氏名を検索" value="<?php echo eh($name); ?>">
                     <button type="submit" value="検索" name="search">🔍</button>
@@ -31,21 +33,22 @@ if (empty($_SESSION['csrf_token'])) {
                     <div class="search-option">
                         <p>性別で探す</p>
                         <select name="gender">
-                            <option disabled selected>性別を選択してください</option>
-                            <option value="" <?php echo $gender === '' ? 'selected' : ''; ?>>全て</option>
-                            <option value="1" <?php echo $gender === '1' ? 'selected' : ''; ?>>男</option>
-                            <option value="2" <?php echo $gender === '2' ? 'selected' : ''; ?>>女</option>
-                            <option value="null" <?php echo $gender === 'null' ? 'selected' : ''; ?>>不明</option>
+                            <option value="" <?php echo ($gender === '') ? 'selected' : ''; ?>>性別を選択してください</option>
+                            <option value="1" <?php echo ($gender === '1') ? 'selected' : ''; ?>>男</option>
+                            <option value="2" <?php echo ($gender === '2') ? 'selected' : ''; ?>>女</option>
+                            <option value="null" <?php echo ($gender === 'null') ? 'selected' : ''; ?>>不明</option>
                         </select>
                     </div>
                     <div class="search-option">
                         <p>部署で探す</p>
-                        <select name="department">
-                            <option value="" disabled selected>部署を選択してください</option>
-                            <option value="">全て</option>
-                            <option value="">A</option>
-                            <option value="">B</option>
-                            <option value="">C</option>
+                        <select name="branch">
+                            <option disabled selected>部署を選択してください</option>
+                            <option value="" <?php echo eh($branches === '') ? 'selected' : ''; ?>>全て</option>
+                            <?php foreach ($branches as $branch_id => $branchName) : ?>
+                                <option value="<?php echo eh($branch_id); ?>" <?php echo eh($branch == $branch_id) ? 'selected' : ''; ?>>
+                                    <?php echo eh($branchName); ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                 </div>
@@ -55,21 +58,23 @@ if (empty($_SESSION['csrf_token'])) {
         <section>
             <div class="list">
                 <?php if ($totalResults == 0) : ?>
-                    <p class="error_search"><?php echo eh($error_message3); ?></p>
+                    <p class="error_search">該当する社員がいません</p>
                 <?php else : ?>
                     <table class="table">
                         <thead>
                             <tr>
                                 <th class="table-title">氏名</th>
                                 <th class="table-title">かな</th>
+                                <th class="table-title">支店</th>
                                 <th class="table-title">性別</th>
                                 <th class="table-title">年齢</th>
                                 <th class="table-title">生年月日</th>
                                 <th class="table-title"></th>
+                                <th class="table-title"></th>
                             </tr>
                         </thead>
                         <!-- 検索結果一覧テーブル -->
-                        <?php require_once __DIR__ . '/../search_result/process.php'; ?>
+                        <?php require_once __DIR__ . '/../pages/process.php'; ?>
                     </table>
                 <?php endif; ?>
             </div>

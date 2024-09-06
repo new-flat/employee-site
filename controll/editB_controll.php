@@ -1,7 +1,7 @@
 <?php
 require_once 'branch_controll.php';
 require_once 'error_message.php';
-require_once 'header.php'; // セッション開始とCSRFトークン生成
+require_once __DIR__ . '/../pages/header.php'; // セッション開始とCSRFトークン生成
 
 // トークンが送信されているか確認
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $update_stmt->bindValue(':id', $newId, PDO::PARAM_INT); // 新しいIDで更新
                 $update_stmt->execute();
                 // 成功したら同じページ（edit_branch.php）に戻り、URLを追加してメッセージを表示
-                header("Location: edit_branch.php?id=" . $newId . "&success=2");
+                header("Location:/php_lesson/pages/edit_branch.php?id=" . $newId . "&success=2");
                 // リダイレクト後に不要なコードが実行されないようにする
                 exit;
 
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
 
             $error_query = http_build_query(['errors' => json_encode(['messages' => $errors, 'data' => $error_data])]);
-            header("Location: edit_branch.php?id=" . $originalId . "&" . $error_query);
+            header("Location:/php_lesson/pages/edit_branch.php?id=" . $originalId . "&" . $error_query);
             exit;
         }
     } else {

@@ -1,3 +1,4 @@
+
 body {
     margin: 0;
     padding: 0;
@@ -14,10 +15,173 @@ a {
     text-decoration: none;
 }
 
+/* ログイン画面 */
+.login-main {
+    width: 100%;
+    height: 100%;
+}
+
+.login-title {
+    height: 150px;
+    align-items: center;
+    display: flex;
+}
+
+.login-title h2 {
+    margin: 0 auto;
+}
+
+
+/* ログインフォーム */
+.container {
+    display: flex;
+    width: 520px;
+    height: 500px;
+    max-width: 99%;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background-color: #ffff;
+    border-radius: 15px;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.03);
+    border: 0.1px solid rgba(128, 128, 128, 0.178);
+    margin: auto;
+
+  }
+  
+  .left {
+    width: 66%;
+    height: 100%;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    backdrop-filter: blur(20px);
+    position: relative;
+    z-index: 1;
+  }
+  
+  .form::before {
+    position: absolute;
+    content: "";
+    width: 40%;
+    height: 40%;
+    right: 1%;
+    z-index: -1;
+    background: radial-gradient(
+      circle,
+      rgb(194, 13, 170) 20%,
+      rgb(26, 186, 235) 60%,
+  
+      rgb(26, 186, 235) 100%
+    );
+    filter: blur(70px);
+    border-radius: 50%;
+  }
+  
+  .right {
+    width: 34%;
+    height: 100%;
+    z-index: 1;
+  }
+  
+  .img {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .container::after{
+    position: absolute;
+    content: "";
+    width: 80%;
+    height: 80%;
+    right: -40%;
+    background: radial-gradient(
+      circle,
+      rgba(157, 173, 203, 1) 61%,
+      rgba(99, 122, 159, 1) 100%
+    );
+    border-radius: 50%;
+    z-index: 0.5;
+  }
+  
+  .input,
+  .input-block button {
+    background: rgba(253, 253, 253, 0);
+    outline: none;
+    border: 1px solid rgba(255, 0, 0, 0);
+    border-radius: 0。5rem;
+    padding: 10px;
+    margin: 10px auto;
+    width: 80%;
+    display: block;
+    color: #425981;
+    font-weight: 500;
+    font-size: 1.1em;
+  }
+  
+  .input-block {
+    position: relative;
+  }
+  
+  .login-label {
+    position: absolute;
+    left: 13%;
+    top: 37%;
+    pointer-events: none;
+    color: gray;
+  }
+  
+  .forgot {
+    display: block;
+    margin: 5px 0 10px 0;
+    margin-left: 35px;
+    color: #5e7eb6;
+    font-size: 0.9em;
+  }
+  
+  .input:focus + label,
+  .input:valid + label {
+    transform: translateY(-140%) scale(0.8);
+    transition: all 0.4s;
+  }
+  
+  .input-block button {
+    background-color: #5e7eb6;
+    color: white;
+    font-size: medium;
+    box-shadow: 2px 4px 8px rgba(70, 70, 70, 0.178);
+  }
+
+  .input-block button:hover {
+    background-color: #4871b8;
+  }
+
+  .forgot a {
+    color: #5e7eb6;
+  }
+
+  .forgot a:hover {
+    color: #96b2e3;
+  }
+  
+  .input {
+    box-shadow: inset 4px 4px 4px rgba(165, 163, 163, 0.315),
+      4px 4px 4px rgba(218, 218, 218, 0.13);
+  }
+  
+  
+
 /* ヘッダー部分 */
  #header {
     display: flex;
-    background-color: #444;
+    background-color: #303030;
     height: 90px; 
 }
 
@@ -38,6 +202,119 @@ a {
     background-color: #656565;
 }
 
+.user-info {
+    color: white;
+    font-size: 14px;
+    margin: auto 15px;
+}
+
+/* ログアウトボタンｓ */
+.logout,.logout::after {
+    padding: 34px;
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: transparent;
+    position: relative;
+  }
+  
+  .logout::after {
+    --move1: inset(50% 50% 50% 50%);
+    --move2: inset(31% 0 40% 0);
+    --move3: inset(39% 0 15% 0);
+    --move4: inset(45% 0 40% 0);
+    --move5: inset(45% 0 6% 0);
+    --move6: inset(14% 0 61% 0);
+    clip-path: var(--move1);
+    content: 'ログアウト';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: block;
+  }
+  
+  .logout:hover::after {
+    animation: glitch_4011 1s;
+    text-shadow: 10 10px 10px black;
+    animation-timing-function: steps(2, end);
+    text-shadow: -3px -3px 0px #1df2f0, 3px 3px 0px #E94BE8;
+    background-color: transparent;
+    border: 3px solid rgb(0, 255, 213);
+  }
+  
+  .logout:hover {
+    text-shadow: -1px -1px 0px #1df2f0, 1px 1px 0px #E94BE8;
+  }
+  
+  .logout:hover {
+    background-color: transparent;
+    border: 1px solid rgb(0, 255, 213);
+    box-shadow: 0px 10px 10px -10px rgb(0, 255, 213);
+  }
+  
+  @keyframes glitch_4011 {
+    0% {
+      clip-path: var(--move1);
+      transform: translate(0px,-10px);
+    }
+  
+    10% {
+      clip-path: var(--move2);
+      transform: translate(-10px,10px);
+    }
+  
+    20% {
+      clip-path: var(--move3);
+      transform: translate(10px,0px);
+    }
+  
+    30% {
+      clip-path: var(--move4);
+      transform: translate(-10px,10px);
+    }
+  
+    40% {
+      clip-path: var(--move5);
+      transform: translate(10px,-10px);
+    }
+  
+    50% {
+      clip-path: var(--move6);
+      transform: translate(-10px,10px);
+    }
+  
+    60% {
+      clip-path: var(--move1);
+      transform: translate(10px,-10px);
+    }
+  
+    70% {
+      clip-path: var(--move3);
+      transform: translate(-10px,10px);
+    }
+  
+    80% {
+      clip-path: var(--move2);
+      transform: translate(10px,-10px);
+    }
+  
+    90% {
+      clip-path: var(--move4);
+      transform: translate(-10px,10px);
+    }
+  
+    100% {
+      clip-path: var(--move1);
+      transform: translate(0);
+    }
+  }
+  
+  
+  
+
 /* 支店一覧 */
 .title_branch {
     margin: 0;
@@ -52,6 +329,7 @@ a {
     color: white;
     margin: 0 20px;
     font-weight: bold;
+    font-size: 17px;
 }
 
 .wrapper {
@@ -64,7 +342,7 @@ a {
 
 
 #menu-title {
-    background-color: #2b2b2b;
+    background-color: rgba(0,0,0,.9);
     color: white;
 }
 
@@ -75,7 +353,10 @@ a {
     margin: 0;
 }
 
-/* 検索フォーム */
+
+
+
+
 .search-container {
     display: flex;
     flex-direction: column;
@@ -158,14 +439,14 @@ a {
 }
 
 .table th, .table td {
-    border: 2px solid #2b2b2b;
+    border: 2px solid rgba(0,0,0,.9);
     padding: 1em;
 }
 
 .table thead th {
-    background-color: #2b2b2b;
+    background-color: rgba(0,0,0,.9);
     color: white;
-    border: 2px solid #2b2b2b;
+    border: 2px solid rgba(0,0,0,.9);
 }
 
 .count_table {
@@ -174,14 +455,14 @@ a {
 }
 
 .count_table th, .count_table td {
-    border: 2px solid #2b2b2b;
+    border: 2px solid rgba(0,0,0,.9);
     padding: 1em;
 }
 
 .count_table thead th {
-    background-color: #2b2b2b;
+    background-color: rgba(0,0,0,.9);
     color: white;
-    border: 2px solid #2b2b2b;
+    border: 2px solid rgba(0,0,0,.9);
 }
 
 /* ページネーション */
@@ -198,7 +479,7 @@ a {
 /* 編集ボタンリンク */
 .edit-btn {
     color: white;
-    background-color: #2b2b2b;
+    background-color: rgba(0,0,0,.9);
     padding: 10px;
 }
 
@@ -290,9 +571,9 @@ a {
 
 .edit-submit {
     color: white;
-    background-color: #2b2b2b;
-    padding: 10px 50px;
-    margin: 30px 0 50px 0;
+    background-color: rgba(0,0,0,.9);
+    padding: 10px 30px;
+    margin-bottom: 50px;
 }
 
 /* 社員集計 */
@@ -302,6 +583,68 @@ a {
 
 .count_table {
     margin: 0 50px;
+}
+
+/* 資格マスタ */
+
+.quali_table {
+    margin: 0 50px;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.quali_table th, .quali_table td {
+    border: 2px solid rgba(0,0,0,.9);
+    padding: 1em;
+}
+
+.quali_table thead th {
+    background-color: rgba(0,0,0,.9);
+    color: white;
+    border: 2px solid rgba(0,0,0,.9);
+}
+
+/* プロフィール編集 */
+#profile-table {
+    display: table;
+}
+
+.profile-cell {
+    display: table-cell;
+    border: 1px solid;
+    padding: 1rem;
+}
+
+.profile {
+    margin: 50px;
+}
+
+.profile img {
+    width: 40%;
+}
+
+/* プロフィール詳細 */
+.detail {
+    display: flex;
+}
+
+.emp-img img {
+    width: 400px;
+}
+
+.detailBox {
+    margin: 20px;
+}
+
+.empInfo {
+    display: flex;
+}
+
+.empDetail {
+    width: 70px;
+    margin-right: 30px;
+    font-weight: bold;
+    float: left;
 }
 
 ;

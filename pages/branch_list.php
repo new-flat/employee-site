@@ -3,7 +3,6 @@ require_once 'header.php';
 require_once __DIR__ . '/../controll/branch_controll.php';
 require_once __DIR__ . '/../controll/branch_function.php';
 require_once __DIR__ . '/../controll/not_login.php';
-
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +40,7 @@ require_once __DIR__ . '/../controll/not_login.php';
                             </tr>
                         </thead>
                         <!-- 検索結果一覧テーブル -->
-                        <?php require_once __DIR__ . '/../search_result/branch_process.php'; ?>
+                        <?php require_once __DIR__ . '/../pages/branch_process.php'; ?>
                     </table>
                 <?php endif; ?>
             </div>

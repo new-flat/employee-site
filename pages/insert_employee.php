@@ -6,6 +6,7 @@ require_once __DIR__ . '/../controll/employee_controll.php';
 require_once __DIR__ . '/../controll/branch_function.php';
 require_once __DIR__ . '/../controll/quali_controll.php';
 require_once __DIR__ . '/../controll/branch_function.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +37,7 @@ require_once __DIR__ . '/../controll/branch_function.php';
                     <label class="insertLabel">氏名</label>
                     <p class="insertMust">必須</p>
                 </div>
-                <input type="text" name="insertName" required value="<?php echo eh($_POST['insertName'] ?? ''); ?>">
+                <input type="text" name="insertName" value="<?php echo eh($_POST['insertName'] ?? ''); ?>">
                 <?php if (!empty($errors['insertName'])): ?>
                     <p><?php echo eh($errors['insertName']); ?></p>
                 <?php endif; ?>
@@ -46,7 +47,7 @@ require_once __DIR__ . '/../controll/branch_function.php';
                     <label class="insertLabel">かな</label>
                     <p class="insertMust">必須</p>
                 </div>
-                <input type="text" name="insertKana" required value="<?php echo eh($_POST['insertKana'] ?? ''); ?>">
+                <input type="text" name="insertKana" value="<?php echo eh($_POST['insertKana'] ?? ''); ?>">
                 <?php if (!empty($errors['insertKana'])): ?>
                     <p class="error"><?php echo eh($errors['insertKana']); ?></p>
                 <?php endif; ?>
@@ -105,7 +106,7 @@ require_once __DIR__ . '/../controll/branch_function.php';
                     <label class="insertOption">パスワード</label>
                     <p class="insertMust">必須</p>
                 </div>
-                <input type="password" name="insertPass" required value="<?php echo eh($errors['data']['insertPass'] ?? ''); ?>">
+                <input type="password" name="insertPass" value="<?php echo eh($errors['data']['insertPass'] ?? ''); ?>">
                 <?php if (!empty($errors['insertPass'])): ?>
                     <p class="error"><?php echo eh($errors['insertPass']); ?></p>
                 <?php endif; ?>

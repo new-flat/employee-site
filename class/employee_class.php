@@ -52,7 +52,6 @@ class Employee
         return $age;
     }
 
-
     // 性別ラベル表示
 
     public function genderLabel(): ?string 

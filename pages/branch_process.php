@@ -8,7 +8,7 @@ require_once __DIR__ . '/../controll/branch_controll.php';
             <td data-label="電話番号"><?php echo eh($branch->tel); ?></td>
             <td data-label="住所"><?php echo eh($branch->getFullAddress()); ?></td>
             <td data-label="">
-                <a class="edit-btn" href="edit_branch.php?id=<?php echo $branch->id; ?>">編集</a>
+                <a class="edit-btn" href="/php_lesson/pages/edit_branch.php?id=<?php echo eh($branch->id); ?>">編集</a>
             </td>
         </tr>
     </tbody>

@@ -2,7 +2,6 @@
 require_once 'header.php';
 require_once __DIR__ . '/../controll/employee_controll.php';
 require_once __DIR__ . '/../controll/branch_function.php';
-require_once __DIR__ . '/../controll/branch_function.php';
 
 ?>
 
@@ -20,15 +19,14 @@ require_once __DIR__ . '/../controll/branch_function.php';
             <form class="search-container" action="search_employee.php" method="get">
                 <input type="hidden" name="csrf_token" value="<?php echo eh($_SESSION['csrf_token']); ?>">
                 <div class="search-box">
-                    <input type="text" name="username" placeholder="氏名を検索" value="<?php echo eh($name); ?>">
+                    <input type="text" name="name" placeholder="氏名を検索" value="<?php echo eh($name); ?>">
                     <button type="submit" name="search">🔍</button>
                 </div>
                 <div class="search-buttons">
                     <div class="search-option">
                         <p>性別で探す</p>
                         <select name="gender">
-                            <option disabled selected>性別を選択してください</option>
-                            <option value="" <?php echo ($gender === '') ? 'selected' : ''; ?>>全て</option>
+                            <option value="" <?php echo ($gender === '') ? 'selected' : ''; ?>>性別を選択してください</option>
                             <option value="1" <?php echo ($gender === '1') ? 'selected' : ''; ?>>男</option>
                             <option value="2" <?php echo ($gender === '2') ? 'selected' : ''; ?>>女</option>
                             <option value="null" <?php echo ($gender === null) ? 'selected' : ''; ?>>不明</option>
@@ -52,9 +50,6 @@ require_once __DIR__ . '/../controll/branch_function.php';
 
         <section>
             <div class="list">
-                <?php if (empty($employees)): ?>
-                    <p class="error_search">該当する社員がいません</p>
-                <?php else: ?>    
                     <table class="table">
                         <thead>
                             <tr>
@@ -65,12 +60,12 @@ require_once __DIR__ . '/../controll/branch_function.php';
                                 <th class="table-title">年齢</th>
                                 <th class="table-title">生年月日</th>
                                 <th class="table-title"></th>
+                                <th class="table-title"></th>
                             </tr>
                         </thead>
                         <!-- 検索結果一覧テーブル -->
-                        <?php require_once __DIR__ . '/../search_result/process.php'; ?>
+                        <?php require_once __DIR__ . '/../pages/process.php'; ?>
                     </table>
-                <?php endif; ?>  
             </div>
         </section>
 

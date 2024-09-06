@@ -3,42 +3,15 @@
 require_once 'header.php'; // セッション開始とCSRFトークン生成
 require_once __DIR__ . '/../controll/employee_controll.php';
 require_once __DIR__ . '/../controll/error_message.php';
-require_once __DIR__ . '/../controll/branch_function.php';
-require_once __DIR__ . '/../controll/editE_controll.php';
 require_once __DIR__ . '/../controll/quali_controll.php';
 require_once __DIR__ . '/../controll/branch_function.php';
-
-// 社員編集
-$errors = array();
-$user = null;
-if (isset($_GET["id"])) {
-    try {
-        $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root");
-        $edit_sql = "SELECT * FROM `employee` WHERE id = :id";
-        $edit_stmt = $pdo->prepare($edit_sql);
-        $edit_stmt->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
-        $edit_stmt->execute();
-        $user = $edit_stmt->fetch(PDO::FETCH_OBJ); // 1件のデータを取得
-
-        $employeeId = $user->id; // ここで社員IDを取得
-
-        if ($user->email === "0") {
-            $user->email = null;
-        }
-
-        if (!$user) {
-            $errors['id'] = $error_message5;
-        }
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-    }
-} else {
-    $errors['id'] = "URLが間違っています";
-}
+require_once __DIR__ . '/../controll/not_login.php';
 
 if (isset($_GET['errors'])) {
     $errors = json_decode($_GET['errors'], true);
 }
+
+$quali_ids = [];
 
 // 保有資格クエリ作成
 $qualiIdSql = "SELECT quali_id FROM emp_quali WHERE employee_id = :employee_id";
@@ -48,7 +21,6 @@ $stmt->execute();
 
 // 資格IDを配列に格納
 $quali_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
 
 ?>
 
@@ -69,6 +41,7 @@ $quali_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
         </div>
         <?php if (isset($_GET['success']) && $_GET['success'] == 2) : ?>
             <p style="margin:0">更新しました</p>
+            <input type="hidden" name="employee_id" value="<?php echo eh($employeeId); ?>">
         <?php endif ?>
 
         <?php if (isset($errors['id'])) : ?>
@@ -77,13 +50,13 @@ $quali_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
             <form action="/php_lesson/controll/editE_controll.php" method="POST" class="edit-class">
                 <input type="hidden" name="csrf_token" value="<?php echo eh($_SESSION['csrf_token']); ?>">
                 <input type="hidden" name="id" value="<?php echo eh($_GET['id']); ?>">
-                <input type="hidden" name="employee_id" value="<?php echo htmlspecialchars($employeeId); ?>">
                 <div>
                     <div class="label">
                         <label class="insertLabel">氏名</label>
                         <p class="insertMust">必須</p>
                     </div>
                     <input type="text" name="editName" value="<?php echo eh($errors['data']['editName'] ?? $user->username ?? ''); ?>">
+                    <!-- エラー文 -->
                     <?php if (!empty($errors['messages']['editName'])) : ?>
                         <p><?php echo eh($errors['messages']['editName']); ?></p>
                     <?php endif; ?>

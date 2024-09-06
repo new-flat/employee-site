@@ -14,7 +14,7 @@ try {
 
 // パラメータの取得
 $name = $_GET['name'] ?? '';
-$gender = $_GET['gender'] ?? 'n';
+$gender = $_GET['gender'] ?? '';
 $branch = $_GET['branch'] ?? '';
 $page = (int) ($_GET['page'] ?? 1);
 
@@ -25,34 +25,37 @@ $limit = 5;
 $offset = ($page - 1) * $limit;
 
 // SQLクエリの作成
-$sql = 'SELECT * FROM `php-test` WHERE is_deleted = 0';
+$sql = 'SELECT * FROM `employee` WHERE is_deleted = 0';
+
 // カウントクエリの作成
-$countSql = 'SELECT COUNT(*) FROM `php-test` WHERE is_deleted = 0';
+$countSql = 'SELECT COUNT(*) FROM `employee` WHERE is_deleted = 0';
 $params = [];
 
-// 検索出力条件
+// 名前での検索条件
 if (!empty($name)) {
-    $sql .= ' AND (username LIKE :name OR kana LIKE :kana)';
-    $countSql .= ' AND (username LIKE :name OR kana LIKE :kana)';
-    $params[':name'] = $params[':kana'] = '%' . $name . '%';
+    $sql .= ' AND (username LIKE :username OR kana LIKE :kana)';
+    $countSql .= ' AND (username LIKE :username OR kana LIKE :kana)';
+    $params[':username'] = $params[':kana'] = '%' . $name . '%';
 }
 
-if (isset($_GET['search'])) {
+// 性別での検索条件
+if (!empty($gender)) {
     if ($gender === 'null') {
-        $sql .= ' AND gender IS NULL';
+        $sql .= " AND gender IS NULL";
         $countSql .= ' AND gender IS NULL';
-    } elseif ($gender !== '') {
-        $sql .= ' AND gender = :gender';
+    } else {
+        $sql .= " AND gender = :gender";
         $countSql .= ' AND gender = :gender';
         $params[':gender'] = (int) $gender;
     }
 }
-
+// 部署での検索条件
 if (!empty($branch)) {
     $sql .= " AND branch = :branch";
     $countSql .= ' AND branch = :branch';
     $params[':branch'] = (int) $branch;
 }
+
 // クエリ実行
 try {
     // PDOを使用してカウントクエリ実行、該当レコードの総数を取得
@@ -110,13 +113,13 @@ $user = null;
 if (isset($_GET["id"])) {
     try {
         $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root");
-        $edit_sql = "SELECT * FROM `php-test` WHERE id = :id";
+        $edit_sql = "SELECT * FROM `employee` WHERE id = :id";
         $edit_stmt = $pdo->prepare($edit_sql);
         $edit_stmt->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
         $edit_stmt->execute();
         $user = $edit_stmt->fetch(PDO::FETCH_OBJ); // 1件のデータを取得
 
-        if ($user->email === "0") {
+        if ($user->email === "") {
             $user->email = null;
         }
 
@@ -130,8 +133,6 @@ if (isset($_GET["id"])) {
     $errors['id'] = "URLが間違っています";
 }
 
-if (isset($_GET['errors'])) {
-    $errors = json_decode($_GET['errors'], true);
-}
+
 
 ?>
