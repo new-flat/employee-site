@@ -21,10 +21,10 @@ $prof_name = $user['username'];
 $prof_birthDate = $user['birth_date'];
 // 現在の日付を取得
 $currentDate = date('Ymd');
-// 生年月日を処理
-$birthDate = str_replace("-", "", $prof_birthDate);
-// 年齢を計算
-$prof_age = floor(($currentDate - $birthDate) / 10000);
+// 生年月日を処理(null(未設定)の場合は0を設定)
+$birthDate = $prof_birthDate !== null ? str_replace("-", "", $prof_birthDate) : 0;
+// 年齢を計算(生年月日が0の場合は空白で表示)
+$prof_age = $birthDate !== 0 ? floor(($currentDate - $birthDate) / 10000) : "";
 if ($prof_age === false) {
     return null;
 }
@@ -49,11 +49,11 @@ $introText = $user['intro_text'];
         <div id="menu-title" class="wrapper">
             <h1 class="title-name">プロフィール編集</h1>
         </div>
-        <!-- 成功メッセージ -->
-        <?php if (isset($_GET['success']) && $_GET['success'] == 4) : ?>
-            <p style="margin:0">更新しました</p>
-        <?php endif ?>
         <div id="profile-tabel" class="profile">
+            <!-- 成功メッセージ -->
+            <?php if (isset($_GET['success']) && $_GET['success'] == 4) : ?>
+                <p class="success_message">更新しました</p>
+            <?php endif ?>
             <p class="profile-cell">氏名</p>
             <p class="profile-cell"><?php echo eh($prof_name); ?></p>
             <p class="profile-cell">生年月日</p>
