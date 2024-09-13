@@ -15,168 +15,98 @@ a {
     text-decoration: none;
 }
 
-/* ログイン画面 */
-.login-main {
-    width: 100%;
-    height: 100%;
+/* 成功メッセージ */
+.success_message {
+  margin: 0;
+  color: green;
+}
+  
+/* ログイン・新規登録フォーム（未登録の社員用） */
+.form-box {
+  max-width: 450px;
+  background: #f1f7fe;
+  overflow: hidden;
+  border-radius: 16px;
+  color: #010101;
+  margin: 0 auto;
+  margin-top: 150px;
 }
 
-.login-title {
-    height: 150px;
-    align-items: center;
-    display: flex;
+.form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 50px 38px;
+  gap: 16px;
+  text-align: center;
 }
 
-.login-title h2 {
-    margin: 0 auto;
+/*Form text*/
+.title {
+  font-weight: bold;
+  font-size: 1.6rem;
 }
 
+.subtitle {
+  font-size: 1rem;
+  color: #666;
+}
 
-/* ログインフォーム */
-.container {
-    display: flex;
-    width: 520px;
-    height: 500px;
-    max-width: 99%;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    background-color: #ffff;
-    border-radius: 15px;
-    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.03);
-    border: 0.1px solid rgba(128, 128, 128, 0.178);
-    margin: auto;
+/*Inputs box*/
+.form-container {
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #fff;
+  margin: 1rem 0 .5rem;
+  width: 100%;
+}
 
-  }
-  
-  .left {
-    width: 66%;
-    height: 100%;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    left: 0;
-    backdrop-filter: blur(20px);
-    position: relative;
-    z-index: 1;
-  }
-  
-  .form::before {
-    position: absolute;
-    content: "";
-    width: 40%;
-    height: 40%;
-    right: 1%;
-    z-index: -1;
-    background: radial-gradient(
-      circle,
-      rgb(194, 13, 170) 20%,
-      rgb(26, 186, 235) 60%,
-  
-      rgb(26, 186, 235) 100%
-    );
-    filter: blur(70px);
-    border-radius: 50%;
-  }
-  
-  .right {
-    width: 34%;
-    height: 100%;
-    z-index: 1;
-  }
-  
-  .img {
-    width: 100%;
-    height: 100%;
-  }
-  
-  .container::after{
-    position: absolute;
-    content: "";
-    width: 80%;
-    height: 80%;
-    right: -40%;
-    background: radial-gradient(
-      circle,
-      rgba(157, 173, 203, 1) 61%,
-      rgba(99, 122, 159, 1) 100%
-    );
-    border-radius: 50%;
-    z-index: 0.5;
-  }
-  
-  .input,
-  .input-block button {
-    background: rgba(253, 253, 253, 0);
-    outline: none;
-    border: 1px solid rgba(255, 0, 0, 0);
-    border-radius: 0。5rem;
-    padding: 10px;
-    margin: 10px auto;
-    width: 80%;
-    display: block;
-    color: #425981;
-    font-weight: 500;
-    font-size: 1.1em;
-  }
-  
-  .input-block {
-    position: relative;
-  }
-  
-  .login-label {
-    position: absolute;
-    left: 13%;
-    top: 37%;
-    pointer-events: none;
-    color: gray;
-  }
-  
-  .forgot {
-    display: block;
-    margin: 5px 0 10px 0;
-    margin-left: 35px;
-    color: #5e7eb6;
-    font-size: 0.9em;
-  }
-  
-  .input:focus + label,
-  .input:valid + label {
-    transform: translateY(-140%) scale(0.8);
-    transition: all 0.4s;
-  }
-  
-  .input-block button {
-    background-color: #5e7eb6;
-    color: white;
-    font-size: medium;
-    box-shadow: 2px 4px 8px rgba(70, 70, 70, 0.178);
-  }
+.input {
+  background: none;
+  border: 0;
+  outline: 0;
+  height: 40px;
+  width: 100%;
+  border-bottom: 1px solid #eee;
+  font-size: .9rem;
+  padding: 8px 15px;
+}
 
-  .input-block button:hover {
-    background-color: #4871b8;
-  }
+.form-section {
+  padding: 16px 38px;
+  font-size: .85rem;
+  background-color: #e0ecfb;
+  box-shadow: rgb(0 0 0 / 8%) 0 -1px;
+}
 
-  .forgot a {
-    color: #5e7eb6;
-  }
+.form-section a {
+  font-weight: bold;
+  color: #0066ff;
+  transition: color .3s ease;
+}
 
-  .forgot a:hover {
-    color: #96b2e3;
-  }
-  
-  .input {
-    box-shadow: inset 4px 4px 4px rgba(165, 163, 163, 0.315),
-      4px 4px 4px rgba(218, 218, 218, 0.13);
-  }
-  
-  
+.form-section a:hover {
+  color: #005ce6;
+  text-decoration: underline;
+}
+
+/*登録ボタン*/
+.form button {
+  background-color: #0066ff;
+  color: #fff;
+  border: 0;
+  border-radius: 24px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .3s ease;
+  margin-top: 10px;
+}
+
+.form button:hover {
+  background-color: #005ce6;
+}
 
 /* ヘッダー部分 */
  #header {
@@ -351,6 +281,7 @@ a {
     font-size: 25px;
     font-weight: bold;
     margin: 0;
+    margin-bottom: 50px;
 }
 
 
@@ -481,6 +412,7 @@ a {
     color: white;
     background-color: rgba(0,0,0,.9);
     padding: 10px;
+    margin-bottom: 50px;
 }
 
 /* ページ番号リンク */
@@ -573,7 +505,7 @@ a {
     color: white;
     background-color: rgba(0,0,0,.9);
     padding: 10px 30px;
-    margin-bottom: 50px;
+    margin: 50px 0;
 }
 
 /* 社員集計 */
@@ -626,6 +558,7 @@ a {
 /* プロフィール詳細 */
 .detail {
     display: flex;
+    padding-bottom: 50px;
 }
 
 .emp-img img {
