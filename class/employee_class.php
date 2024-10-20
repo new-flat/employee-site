@@ -32,7 +32,6 @@ class Employee
     }
 
     // 生年月日から年齢を算出
-
     public function ageFromBirthday(): ?float
     {
         if ($this->birth_date === null) {
@@ -53,7 +52,6 @@ class Employee
     }
 
     // 性別ラベル表示
-
     public function genderLabel(): ?string 
     {
         if ($this->gender === null) {
@@ -72,7 +70,6 @@ class Employee
     }
 
     // 血液型ラベル表示
-
     public function bloodTypeLabel():string
     {
         switch ($this->blood_type) {
@@ -100,8 +97,7 @@ class Employee
     {
         $branches = array(
             1 => "札幌支店", 2 => "仙台支店", 3 => "さいたま支店", 4 => "東京支店", 5 => "千葉支店", 6 => "横浜支店", 7 => "名古屋支店",
-            8 => "京都支店", 9 => "大阪本社", 10 => "神戸支店", 11 => "高松支店", 12 => "京都支店", 13 => "広島支店", 14 => "福岡支店",
-            15 => "那覇支店"
+            8 => "京都支店", 9 => "大阪本社", 10 => "神戸支店", 11 => "高松支店", 12 => "広島支店", 13 => "福岡支店",14 => "那覇支店"
         );
 
 

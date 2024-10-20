@@ -2,8 +2,6 @@
 require_once 'header.php';
 require_once __DIR__ . '/../controll/total_count.php';
 require_once __DIR__ . '/../controll/branch_function.php';
-
-
 ?>
 
 <!DOCTYPE html>
@@ -13,11 +11,11 @@ require_once __DIR__ . '/../controll/branch_function.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>社員管理システム</title>
-    <link rel="stylesheet" href='/php_lesson/css/style.css'>
+    <link rel="stylesheet" href='/employee_site/css/style.css'>
 </head>
 <body>
-    <div id="main" class="wrapper" style="padding-bottom: 50px;">
-        <div id="menu-title" class="wrapper">
+    <div id="main" class="wrapper">
+        <div id="menu-title">
             <h1 class="title-name">社員集計</h1>
         </div>
         <h2 class="count_title">表1 :男女別社員数</h2>
@@ -49,11 +47,11 @@ require_once __DIR__ . '/../controll/branch_function.php';
                     <th class="table-title">部門</th>
                     <th class="table-title">社員数</th>
                 </tr>
-            <?php foreach ($branches as $brancheId => $branch_name) : ?>
-                <?php $employee_each_branch = $branch_counts[$brancheId] ?>
+            <?php foreach ($branches as $brancheId => $branchName) : ?>
+                <?php $employeeEachBranch = $branchCounts[$brancheId] ?>
                 <tr>
-                    <td><?php echo $branch_name; ?></td>
-                    <td><?php echo "$employee_each_branch\n"; ?></td>
+                    <td><?php echo $branchName; ?></td>
+                    <td><?php echo "$employeeEachBranch\n"; ?></td>
                 </tr>
             <?php endforeach; ?>    
             </thead>

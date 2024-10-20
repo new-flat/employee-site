@@ -1,4 +1,3 @@
-
 <?php 
 require_once __DIR__ . '/../controll/employee_controll.php'; 
 ?>
@@ -8,7 +7,7 @@ require_once __DIR__ . '/../controll/employee_controll.php';
             <th><?php echo eh($employee->username); ?></th>
             <td data-label="かな"><?php echo eh($employee->kana); ?></td>
 
-            <td data-label="支店"><?php echo eh($employee->getAddress()); ?></td>
+            <td data-label="支店"><?php echo eh($employee->getAddress() ?? "不明"); ?></td>
 
             <td data-label="性別"><?php echo eh($employee->genderLabel() ?? "不明"); ?></td>
             

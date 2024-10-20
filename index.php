@@ -1,8 +1,12 @@
 <?php
-session_start();
 require_once __DIR__ . '/../controll/xss.php';
 
-// ログイン成功時にセッションIDを再生成
+// セッションの有効期限を1時間に設定
+session_set_cookie_params(3600);
+
+session_start();
+
+// ログイン成功時にセッションIDを再生成（セッション固定攻撃対策）
 session_regenerate_id(true);
 
 // CSRFトークンの生成
@@ -14,19 +18,19 @@ if (empty($_SESSION['csrf_token'])) {
 if (isset($_POST['logout'])) {
     session_unset();
 }
+?>
 
- ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>社員管理システム</title>
-    <link rel="stylesheet" href='/php_lesson/css/style.css'>
+    <link rel="stylesheet" href='/employee_site/css/style.css'>
 </head>
 <body>
     <div class="form-box">
-        <form action="/php_lesson/controll/login.php" method="POST" class="form">
+        <form action="/employee_site/controll/login.php" method="POST" class="form">
             <!-- 新規登録成功メッセージ -->
             <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
                 <p class="success_message">登録しました</p>
@@ -34,7 +38,7 @@ if (isset($_POST['logout'])) {
             <input type='hidden' name='csrf_token' value='<?php echo eh($_SESSION['csrf_token']); ?>'>
             <?php if (isset($_SESSION['error'])): ?>
                 <!-- unset()でセッションから'error'キーを削除し再度表示されないようにする -->
-                <p><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></p>
+                <p class="error-message"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></p>
             <?php endif; ?>  
             <span class="title">ログイン</span>
             <span class="subtitle">メールアドレスとパスワードを入力してください</span>

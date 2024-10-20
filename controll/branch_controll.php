@@ -1,17 +1,11 @@
 <?php
 
 require_once 'xss.php';
+require_once 'pdo_connect.php';
 require_once __DIR__ . '/../class/branch_class.php';
 
 // DB接続
-try {
-    $pdo = new PDO('mysql:host=localhost;dbname=php-test', 'root', 'root', [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    ]);
-} catch (PDOException $e) {
-    echo $e->getMessage();
-    exit;
-}
+$pdo = getPdoConnection();
 
 // パラメータの取得
 $branchName = $_GET['branch_name'] ?? '';
@@ -24,7 +18,7 @@ $limit = 5;
 $offset = ($page - 1) * $limit;
 
 // SQLクエリの作成
-$sql = 'SELECT * FROM `branch` WHERE 1=1';
+$branchSql = 'SELECT * FROM `branch` WHERE 1=1';
 
 // カウントクエリの作成
 $countSql = 'SELECT COUNT(*) FROM `branch` WHERE 1=1';
@@ -32,7 +26,7 @@ $params = [];
 
 // 検索出力条件
 if (!empty($branchName)) {
-    $sql .= ' AND `branch_name` LIKE :branch_name';
+    $branchSql .= ' AND `branch_name` LIKE :branch_name';
     $countSql .= ' AND `branch_name` LIKE :branch_name';
     $params[':branch_name'] = '%' . $branchName . '%';
 }
@@ -47,8 +41,8 @@ try {
     $totalPages = max(ceil($totalResults / $limit), 1);
 
     // データクエリ取得の実行
-    $sql .= ' LIMIT :limit OFFSET :offset';
-    $stmt = $pdo->prepare($sql);
+    $branchSql .= ' LIMIT :limit OFFSET :offset';
+    $stmt = $pdo->prepare($branchSql);
     foreach ($params as $key => $value) {
         $stmt->bindValue($key, $value);
     }
@@ -63,8 +57,7 @@ try {
         $branchList[] = new Branch($data);
     }
 } catch (PDOException $e) {
-    error_log($e->getMessage());
-    echo 'データベースエラーが発生しました。もう一度お試しください。';
+    echo $e->getMessage();
     exit;
 }
 
@@ -88,13 +81,13 @@ if ($page == 1 || $page == $totalPages) {
 // DBの接続を閉じる
 $pdo = null;
 
-
 // 支店編集
 $errors = array();
 $user = null;
 if (isset($_GET["id"])) {
     try {
-        $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root");
+        // DB接続
+        $pdo = getPdoConnection();
         $sql = "SELECT * FROM `branch` WHERE id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
@@ -116,6 +109,5 @@ if (isset($_GET["id"])) {
 if (isset($_GET['errors'])) {
     $errors = json_decode($_GET['errors'], true);
 }
-
 
 ?>

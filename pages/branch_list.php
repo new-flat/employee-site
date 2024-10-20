@@ -11,16 +11,18 @@ require_once __DIR__ . '/../controll/not_login.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>支店一覧</title>
-    <link rel="stylesheet" href='/php_lesson/css/style.css'>
+    <link rel="stylesheet" href='/employee_site/css/style.css'>
 </head>
 <body>
     <div id="main" class="wrapper">
         <section>
             <form class="search-container" action="search_branch.php" method="get">
                 <div class="search-branch">
-                    <p>支店を検索</p>
-                    <input type="text" name="branch_name" value="">
-                    <button type="submit">🔍</button>
+                    <p>支店名を検索</p>
+                    <div class="search-box">
+                        <input type="text" name="branch_name" value="">
+                        <button type="submit">🔍</button>
+                    </div>
                 </div>
             </form>
         </section>
@@ -28,7 +30,7 @@ require_once __DIR__ . '/../controll/not_login.php';
         <section>
             <div class="list">
                 <?php if (empty($branchList)) : ?>
-                    <p class="error_search">該当する支店がありません</p>
+                    <p>該当する支店がありません</p>
                 <?php else : ?>
                     <table class="table">
                         <thead>
@@ -48,7 +50,7 @@ require_once __DIR__ . '/../controll/not_login.php';
 
         <section>
             <div class="pageNation">
-                <?php require_once __DIR__ . '/../common/page_nation.php'; ?>
+                <?php require_once __DIR__ . '/../common/page_branch.php'; ?>
             </div>
         </section>
     </div>

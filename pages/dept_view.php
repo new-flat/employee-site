@@ -14,7 +14,7 @@ $deptList = $pdo->query("SELECT * FROM dept ORDER BY id ASC")->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>プロフィール編集</title>
-    <link rel="stylesheet" href='/php_lesson/css/style.css'>
+    <link rel="stylesheet" href='/employee_site/css/style.css'>
 </head>
 <body>
     <div id="main" class="wrapper">

@@ -1,16 +1,11 @@
 <?php
 
 require_once 'xss.php';
+require_once 'pdo_connect.php';
 require_once __DIR__ . '/../class/employee_class.php';
 
 // DB接続
-try {
-    $pdo = new PDO('mysql:host=localhost;dbname=php-test', 'root', 'root', [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    ]);
-} catch (PDOException $e) {
-    echo $e->getMessage();
-}
+$pdo = getPdoConnection();
 
 // パラメータの取得
 $name = $_GET['name'] ?? '';
@@ -49,6 +44,7 @@ if (!empty($gender)) {
         $params[':gender'] = (int) $gender;
     }
 }
+
 // 部署での検索条件
 if (!empty($branch)) {
     $sql .= " AND branch = :branch";
@@ -59,9 +55,9 @@ if (!empty($branch)) {
 // クエリ実行
 try {
     // PDOを使用してカウントクエリ実行、該当レコードの総数を取得
-    $stmt = $pdo->prepare($countSql);
-    $stmt->execute($params);
-    $totalResults = $stmt->fetchColumn();
+    $countStmt = $pdo->prepare($countSql);
+    $countStmt->execute($params);
+    $totalResults = $countStmt->fetchColumn();
     $totalPages = ceil($totalResults / $limit);
 
     // データクエリ取得の実行
@@ -82,7 +78,6 @@ try {
         $employees[] = new Employee($data);
     }
 } catch (PDOException $e) {
-    error_log($e->getMessage());
     echo $e->getMessage();
     exit;
 }
@@ -106,33 +101,5 @@ if ($page == 1 || $page == $totalPages) {
 
 // DBの接続を閉じる
 $pdo = null;
-
-// 社員編集
-$errors = array();
-$user = null;
-if (isset($_GET["id"])) {
-    try {
-        $pdo = new PDO('mysql:host=localhost;dbname=php-test', "root", "root");
-        $edit_sql = "SELECT * FROM `employee` WHERE id = :id";
-        $edit_stmt = $pdo->prepare($edit_sql);
-        $edit_stmt->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
-        $edit_stmt->execute();
-        $user = $edit_stmt->fetch(PDO::FETCH_OBJ); // 1件のデータを取得
-
-        if ($user->email === "") {
-            $user->email = null;
-        }
-
-        if (!$user) {
-            $errors['id'] = "URLが間違っています";
-        }
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-    }
-} else {
-    $errors['id'] = "URLが間違っています";
-}
-
-
 
 ?>

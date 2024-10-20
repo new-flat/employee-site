@@ -1,14 +1,9 @@
 <?php
-
 require_once 'header.php'; // セッション開始とCSRFトークン生成
 require_once __DIR__ . '/../controll/branch_controll.php';
 require_once __DIR__ . '/../controll/branch_function.php';
-require_once __DIR__ . '/../controll/error_message.php';
 require_once __DIR__ . '/../controll/not_login.php';
 require_once __DIR__ . '/../class/branch_class.php';
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -18,18 +13,21 @@ require_once __DIR__ . '/../class/branch_class.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>支店編集</title>
-    <link rel="stylesheet" href='/php_lesson/css/style.css'>
+    <link rel="stylesheet" href='/employee_site/css/style.css'>
 </head>
 
 <body>
     <div id="main" class="wrapper">
-        <div id="menu-title" class="wrapper">
+        <div id="menu-title">
             <h1 class="title-name">支店編集</h1>
         </div>
-        <?php if (isset($_GET['success']) && $_GET['success'] == 2) : ?>
-            <p style="margin:0">更新しました</p>
+
+        <!-- 成功メッセージ -->
+        <?php if (isset($_GET['success']) && $_GET['success'] == 1) : ?>
+            <p class="success-message">更新しました</p>
         <?php endif ?>
 
+        <!--　URLが間違っていればエラーメッセージ表示 -->
         <?php if (isset($errors['id'])) : ?>
             <p style="margin:0"><?php echo eh($errors['id']); ?></p>
         <?php else : ?>
@@ -37,6 +35,7 @@ require_once __DIR__ . '/../class/branch_class.php';
                 <input type="hidden" name="csrf_token" value="<?php echo eh($_SESSION['csrf_token']); ?>">
                 <input type="hidden" name="originalId" value="<?php echo eh($branch->id) ?>">
                 
+                <!-- 支店名 -->
                 <div>
                     <div class="label">
                         <label class="insertLabel">支店名</label>
@@ -48,10 +47,11 @@ require_once __DIR__ . '/../class/branch_class.php';
                     <?php endif; ?>
                 </div>
 
+                <!-- 住所 -->
                 <div>
                     <div class="label">
                         <label class="insertLabel">住所</label>
-                        <p class="insertMust">必須</p>
+                        <p class="insert-must">必須</p>
                     </div>
                     <div>
                         <select name="editPrefecture">
@@ -86,6 +86,7 @@ require_once __DIR__ . '/../class/branch_class.php';
                     </div>
                 </div>
 
+                <!-- 電話番号 -->
                 <div>
                     <div class="label">
                         <label class="insertLabel">電話番号</label>
@@ -97,6 +98,7 @@ require_once __DIR__ . '/../class/branch_class.php';
                     <?php endif; ?>
                 </div>
 
+                <!-- 並び順（ID） -->
                 <div>
                     <div class="label">
                         <label class="insertLabel">並び順</label>
@@ -109,7 +111,7 @@ require_once __DIR__ . '/../class/branch_class.php';
                 </div>
 
                 <!-- 保存ボタン -->
-                <input class="edit-submit" type="submit"  name="edit">
+                <input type="submit" class="submit-btn"  name="edit">
             </form>
         <?php endif; ?>
     </div>
