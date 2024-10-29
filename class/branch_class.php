@@ -1,5 +1,4 @@
 <?php  
-
 class Branch 
 {
     public $id;
