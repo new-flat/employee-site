@@ -41,7 +41,7 @@ if (isset($_POST['logout'])) {
                 <p class="error-message"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></p>
             <?php endif; ?>  
             <span class="title">ログイン</span>
-            <span class="subtitle">メールアドレスとパスワードを入力してください</span>
+            <span class="subtitle">メールアドレスとパスワードを入力して下さい</span>
             <div class="form-container">
                 <input class="input" type="email" name="email" placeholder="メールアドレス">
                 <input class="input" type="password" name="pass" placeholder="パスワード">
